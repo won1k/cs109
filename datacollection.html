@@ -32,9 +32,9 @@
         <h3>
   <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Overview</h3>
 
-  <p>We collected movie scripts from <a href = 'http://www.simplyscripts.com'><b>SimplyScripts.com</b></a> and <a href='http://www.dailyscript.com'><b>DailyScript.com</b></a>. Altogether, we were able to get a total of 396 scripts, as well as their associated IMDB ID numbers from these sites. Next, we used the RottenTomatoes.com API to grab metadata about each movie. We obtained some data that was unavailable on Rotten Tomatoes from <a href='http://www.imdb.com/help/show_leaf?usedatasoftware'>IMDB</a> (Used with permission).</p>
+  <p>We collected movie scripts from <a href = 'http://www.simplyscripts.com'>SimplyScripts.com</a> and <a href='http://www.dailyscript.com'>DailyScript.com</a>. Altogether, we were able to get a total of 396 scripts, as well as their associated IMDB ID numbers from these sites. Next, we used the RottenTomatoes.com API to grab metadata about each movie. We obtained some data that was unavailable on Rotten Tomatoes from <a href='http://www.imdb.com/help/show_leaf?usedatasoftware'>IMDB</a> (Used with permission).</p>
   <h3>Scraping data</h3>
-  <p>We used the <a href = 'http://www.crummy.com/software/BeautifulSoup/'>BeautifulSoup</a> module in Python to assist with web scraping.</p>
+ <p>We used the <a href = 'http://www.crummy.com/software/BeautifulSoup/'>BeautifulSoup</a> module in Python to assist with web scraping. For this process, we iterated through each page containing scripts on <a href = 'http://www.simplyscripts.com'>SimplyScripts.com</a> and <a href='http://www.dailyscript.com'>DailyScript.com</a>. If a link linked to a script in txt or html format and the website showed valid IMDB number associated with the script, then our program downloads that script and adds the IMDB number to a list. If the script is in HTML format, then we convert it to txt format using the html2text.py file available at <a href ='http://www.aaronsw.com/2002/html2text/'>www.aaronsw.com/2002/html2text/</a>. Finally, before moving on to the next step, we delete duplicates from the list of IMDB numbers, so that for the next steps we only grab information once for each movie.</p>
 
       </section>
     </div>
