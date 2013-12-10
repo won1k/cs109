@@ -39,7 +39,9 @@
 
   <p>In order to reduce the dimensionality of the dataset, we perform Latent Dirichlet Allocation (LDA) on our script corpus to discover the top 50 topics 
   <a href="http://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf" target="_blank">(Blei, Ng and Jordan, 2003)</a>.</p>
+
   <p>A document is a vector of words: w = [w<sub>1</sub>,w<sub>2</sub>,…,w<sub>N</sub>], where w<sub>i</sub> is the i<sup>th</sup> word in the sequence. A corpus is a collection of M documents: <br>D = [w<sub>1</sub>,w<sub>2</sub>,…,w<sub>M</sub>]</p>
+
   <h4>To generate a document:</h4>
   <ul>
 	<li>Choose θ ∼ Dirichlet(α)</li>
@@ -72,7 +74,7 @@
           trees  |     terror  |    alright
           draws  |  continues  |     always
 
-	      </pre></code><center>
+	      </pre></code></center>
 
 	<p>Now we use logistic regression with L1 regularization to predict the probability that a movie belongs to a given genre. 
 	  Since movies can belong to more than one genre, we run a logistic regression model for each genre.
