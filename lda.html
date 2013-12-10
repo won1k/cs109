@@ -33,9 +33,10 @@
   <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Exploratory Data Analysis</h3>
 
   <p>After some pre-processing the length of the scripts follow a fairly Gaussian distribution:</p>
-  <img src = "script_length_distro.png" /><br>
+  <center><img src = "script_length_distro.png" /></center>
 
   </br>
+
   <p>In order to reduce the dimensionality of the dataset, we perform Latent Dirichlet Allocation (LDA) on our script corpus to discover 50 topics 
   <a href="http://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf" target="_blank">(Blei, Ng and Jordan, 2003)</a>.</p>
   <p>A document is a vector of words: w=[w<sub>1</sub>,w<sub>2</sub>,…,w<sub>N</sub>], where w<sub>i</sub> is the i<sup>th</sup> word in the sequence. A corpus is a collection of M documents: D = [w<sub>1</sub>,w<sub>2</sub>,…,w<sub>M</sub>]</p>
@@ -49,10 +50,58 @@
 	</ul>
   </ul>
 
-	<p>After taking at how topics are distributed in our corpus, we use topics as a feature in our regression analyses. 
+	<p>After taking a look at how topics are distributed in our corpus, we use topics as a feature in our regression analyses. 
 	  With our 50 topics, each script gets a score for each topic between 0 and 1 indicating the proportion of the script that was generated form a given topic. 
 	  These are considered numerical features and help us predict genre and box office success.
 	  </p>
+
+	<p>The top ten words for a biased sample of these topics are:</p>
+
+	<p>Now we use logistic regression with L1 regularization to predict the probability that a movie belongs to a given genre. 
+	  Since movies can belong to more than one genre, we run a logistic regression model for each genre.
+	  </p>
+
+	<center><pre><code>
+                                                                               
+                    Genre | Prediction Success Rate | Pure Chance | Num. Movies
+--------------------------------------------------------------------------------
+       Action & Adventure |            0.77         |     0.68    |      127
+                Animation |            0.98         |     0.97    |       10
+Art House & International |            0.99         |     0.96    |       14
+                 Classics |            0.89         |     0.87    |       50
+                   Comedy |            0.78         |     0.70    |      118
+              Cult Movies |            1.00         |     0.98    |        6
+              Documentary |            0.99         |     0.98    |        7
+                    Drama |            0.79         |     0.50    |      199
+                   Horror |            0.84         |     0.82    |       73
+            Kids & Family |            0.95         |     0.96    |       16
+Musical & Performing Arts |            0.97         |     0.97    |       11
+       Mystery & Suspense |            0.66         |     0.72    |      112
+                  Romance |            0.91         |     0.89    |       43
+Science Fiction & Fantasy |            0.79         |     0.74    |      104
+         Special Interest |            0.99         |     0.99    |        4
+               Television |            0.97         |     0.99    |        5
+                  Western |            1.00         |     0.99    |        4
+		    </pre></code></center>
+
+	<p>
+	  Unsurprisingly, genres that are not well represented in our corpus cannot be predicted very easily. 
+	  That is, without many training examples, it is very difficult to improve on pure guessing. 
+	  Accordingly, we only look at four genres for predicting box office success.
+	  </p>
+
+	<center><pre><code>
+                    Genre | Prediction Success Rate | Pure Chance | Num. Movies
+--------------------------------------------------------------------------------
+       Action & Adventure |            0.69         |     0.68    |      127
+                   Comedy |            0.75         |     0.70    |      118
+                    Drama |            0.77         |     0.50    |      199
+Science Fiction & Fantasy |            0.83         |     0.74    |      104
+		    </pre></code></center>
+
+	<p>Note: results have an element of randomness since the training and test sets are randomly partitioned before each run.</p>
+
+	<p></p>
       </section>
     </div>
     <footer>
