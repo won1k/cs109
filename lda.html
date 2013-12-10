@@ -33,7 +33,26 @@
   <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Exploratory Data Analysis</h3>
 
   <p>After some pre-processing the length of the scripts follow a fairly Gaussian distribution:</p>
-  <img src = "script_length_distro.png" height=300 width=400/><br>
+  <img src = "script_length_distro.png" /><br>
+
+  </br>
+  <p>In order to reduce the dimensionality of the dataset, we perform Latent Dirichlet Allocation (LDA) on our script corpus to discover 50 topics 
+  <a href="http://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf" target="_blank">(Blei, Ng and Jordan, 2003)</a>.</p>
+  <p>A document is a vector of words: w=[w<sub>1</sub>,w<sub>2</sub>,…,w<sub>N</sub>], where w<sub>i</sub> is the i<sup>th</sup> word in the sequence. A corpus is a collection of M documents: D = [w<sub>1</sub>,w<sub>2</sub>,…,w<sub>M</sub>]</p>
+  <h4>To generate a document:</h4>
+  <ul>
+	<li>Choose θ∼Dirichlet(α)</li>
+	<li>For each word in w:</li>
+	<ul>
+	  <li>Choose a topic: zi∼Multinomial(θ)</li>
+	  <li>Each topic is a distribution over words, meaning that we pick a word w<sub>i</sub>∼Multinomial(p<sub>z<sub>i</sub></sub>)</li>
+	</ul>
+  </ul>
+
+	<p>After taking at how topics are distributed in our corpus, we use topics as a feature in our regression analyses. 
+	  With our 50 topics, each script gets a score for each topic between 0 and 1 indicating the proportion of the script that was generated form a given topic. 
+	  These are considered numerical features and help us predict genre and box office success.
+	  </p>
       </section>
     </div>
     <footer>
