@@ -237,6 +237,10 @@ img {
   border: 1px solid #000;
 }
 
+#logo {
+  border: 0;
+}
+
 code, pre {
   font-family: Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal;
   color: #333;
