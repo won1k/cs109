@@ -1,9 +1,10 @@
+
 <!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Cs109 by won1k</title>
+    <title>CS109 Final Project</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -17,23 +18,25 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Cs109</h1>
-        <p>CS 109 Final Project - Ben, Ryan, Conor, Daniel</p>
+        <h1>Scripting for Success in Hollywood</h1>
+        <p>By J. Ben Cook, W. Ryan Lee, Conor Myhrvold, and Daniel Newman</p>
         <p class="view"><a href="https://github.com/won1k/cs109">View the Project on GitHub <small>won1k/cs109</small></a></p>
         <ul>
-          <li><a href="https://github.com/won1k/cs109/"><b>Home</b></a></li>
-          <li><a href="https://github.com/won1k/cs109/datacollection.html"><b>Data Collection</b></a></li>
-          <li><a href="https://github.com/won1k/cs109/tarball/master"><b>Exploratory Data Analysis</b></a></li>
-          <li><a href="https://github.com/won1k/cs109"><b>LDA Analysis</b></a></li>
+          <li><a href="index.html">Go to <strong>Home</strong></a></li>
+          <li><a href="datacollection.html"><strong>Data</strong> Collection</a></li>
+          <li><a href="eda.html"><strong>Exploratory</strong> Data Analysis</a></li>
+          <li><a href="lda.html"><strong>LDA</strong> Analysis</a></li>
+          <li><a href="https://github.com/won1k/cs109">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
       <section>
         <h3>
-      <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>The Awesome Box Office Success Predictor.</h3>
+  <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Overview</h3>
 
-      <p>Overview</p>
-        <div> hey</div>
-        <div> ho </div>
+  <p>We collected movie scripts from <a href = 'http://www.simplyscripts.com'>SimplyScripts.com> and <a href='http://www.dailyscript.com'>DailyScript.com</a>. Together, we were able to get a total of 396 scripts, as well as their associated IMDB ID numbers from these sites. Next, we used the RottenTomatoes.com API to grab information about each movie including: (LIST HERE) </p>
+  <p>Next, we downloaded data on movie budgets, boxoffice success, and academy award wins/nomination from <a href='http://www.imdb.com/help/show_leaf?usedatasoftware'>IMDB</a> (Used with permission).</p>
+  <h3>Scraping data</h3>
+  <p>We used the <a href = 'http://www.crummy.com/software/BeautifulSoup/'>BeautifulSoup</a> module in Python to assist with web scraping.</p>
 
       </section>
     </div>
