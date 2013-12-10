@@ -32,22 +32,10 @@
         <h3>
   <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Exploratory Data Analysis</h3>
 
-  <p>After collecting our data set of 396 scripts and metadata from Rotten Tomatoes and IMDB, we set out to conduct an exploratory data analysis. The metadata for the scripts include:</p>
-  <ul>
-    <li>Genre</li>
-    <li>Critics Score</li>
-    <li>Audience Score</li>
-    <li>Audience Rating</li>
-    <li>Critics Rating</li>
-    <li>Runtime</li>
-    <li>Year</li>
-    <li>Budget</li>
-    <li>Gross Revenues</li>
-    <li>Oscar Wins</li>
-    <li>Oscar Nominations</li>
-  </ul>
+  <p>After some pre-processing, the length of the scripts follow a fairly Gaussian distribution:</p>
+  <img src = "script_length_distro.png" height=300 width=400/><br>
   <p>This data is used to create histograms, summary statistics, and other visualizations for use in predictive and LDA analysis in later stages of this project. For example, a histogram of movie genres was created and generated the following:</p>
-  <img src = "masterlist_genres_hist.png" /><br>
+
   <p>Additional plots were generated for the number of movies in our data set by year:</p>
   <img src = "masterlist_years_scatter.png" /><br>
   <p>as well as for the distribution of movies by runtimes:</p>
