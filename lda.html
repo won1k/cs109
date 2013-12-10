@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>CS109 Final Project</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Scripting for Success in Hollywood</h1>
+        <p>J. Ben Cook, W. Ryan Lee, Conor Myhrvold, and Daniel Newman</p>
+        <p class="view"><a href="https://github.com/won1k/cs109">View the Project on GitHub <small>won1k/cs109</small></a></p>
+        <ul>
+          <li><a href="index.html">Go to <strong>Home</strong></a></li>
+          <li><a href="datacollection.html"><strong>Data</strong> Collection</a></li>
+          <li><a href="eda.html"><strong>Exploratory</strong> Data Analysis</a></li>
+          <li><a href="lda.html"><strong>LDA</strong> Analysis</a></li>
+          <li><a href="https://github.com/won1k/cs109">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h3>
+  <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Exploratory Data Analysis</h3>
+
+  <p>After some pre-processing, the length of the scripts follow a fairly Gaussian distribution:</p>
+  <img src = "script_length_distro.png" height=300 width=400/><br>
+  <p>This data is used to create histograms, summary statistics, and other visualizations for use in predictive and LDA analysis in later stages of this project. For example, a histogram of movie genres was created and generated the following:</p>
+
+  <p>Additional plots were generated for the number of movies in our data set by year:</p>
+  <img src = "masterlist_years_scatter.png" /><br>
+  <p>as well as for the distribution of movies by runtimes:</p>
+  <img src = "masterlist_runtimes_hist.png" /><br>
+  <p>Finally, to examine whether there is any signal in the naive movie budget amounts to predict gross revenues at the box office, a scatterplot was generated, with the result that there is negligible correlation between the two values:</p>
+  <img src = "masterlist_amount_scatter.png" />
+
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/won1k">won1k</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
