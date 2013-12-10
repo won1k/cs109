@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html>
   <head>
@@ -18,7 +19,7 @@
     <div class="wrapper">
       <header>
         <h1>Scripting for Success in Hollywood</h1>
-        <p>By J. Ben Cook, W. Ryan Lee, Conor Myhrvold, and Daniel Newman</p>
+        <p><span class = "nowrap">J. Ben Cook, W. Ryan Lee, Conor Myhrvold, and Daniel Newman</span></p>
         <p class="view"><a href="https://github.com/won1k/cs109">View the Project on GitHub <small>won1k/cs109</small></a></p>
         <ul>
           <li><a href="index.html">Go to <strong>Home</strong></a></li>
@@ -30,12 +31,33 @@
       </header>
       <section>
         <h3>
-  <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Overview</h3>
+          <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Overview</h3>
+  
+          <p>We collected movie scripts from <a href = 'http://www.simplyscripts.com'>SimplyScripts.com</a> and <a href='http://www.dailyscript.com'>DailyScript.com</a>. Altogether, we were able to get a total of 396 scripts, as well as their associated IMDB ID numbers from these sites. Next, we used the RottenTomatoes.com API to grab metadata about each movie. We obtained some data that was unavailable on Rotten Tomatoes from <a href='http://www.imdb.com/'>IMDB</a>.</p>
+  
+          <h3>Web Scraping Scripts</h3>
+          <p>We used the <a href = 'http://www.crummy.com/software/BeautifulSoup/'>BeautifulSoup</a> module in Python to assist with web scraping. For this process, we iterated through each page containing scripts on <a href = 'http://www.simplyscripts.com'>SimplyScripts.com</a> and <a href='http://www.dailyscript.com'>DailyScript.com</a>. If a link linked to a script in TXT or HTML format and the website showed a valid IMDB number associated with the script, then our program downloads that script and adds the IMDB number to a list which is used to keep track of the movie scripts collected. If the script is in HTML format, then we convert it to txt format using the html2text.py file available at <a href ='http://www.aaronsw.com/2002/html2text/'>www.aaronsw.com/2002/html2text/</a>. Finally, before moving on to the next step, we delete duplicates from the list of IMDB numbers, so that for the next steps we only grab information once for each movie.</p>
+        
+        <h3>Collecting meta data from the Rotten Tomatoes API</h3>
+          <p>We used the <a href = 'http://developer.rottentomatoes.com/'>Rotten Tomatoes Developer API</a> to grab metadata about each movie, including:<p>
+          <ul>
+          	<li>Rotten Tomatoes ID</li>
+          	<li>Genre (Most movies have multiple genres)</li>
+          	<li>Critics' score </li>
+          	<li>Audience score</li>
+          	<li>Critics rating (Fresh or Rotten)</li>
+          	<li>Audience rating (Upright or Spilled)</li>
+          	<li>Runtime</li>
+          	<li>Release year</li>
+          	<li>MPAA Rating </li>
+          	<li>Five leading actors and associated character names </li>
+          </ul>
+          <p>All of this data was added to a tab delineated spreadsheet that was used for other analyses. In this phase, we excluded any scripts that were less than 35kb from this spreadsheet since we found that scripts smaller than this often contained garbage data.</p>
 
-  <p>We collected movie scripts from <a href = 'http://www.simplyscripts.com'>SimplyScripts.com</a> and <a href='http://www.dailyscript.com'>DailyScript.com</a>. Altogether, we were able to get a total of 396 scripts, as well as their associated IMDB ID numbers from these sites. Next, we used the RottenTomatoes.com API to grab metadata about each movie. We obtained some data that was unavailable on Rotten Tomatoes from <a href='http://www.imdb.com/help/show_leaf?usedatasoftware'>IMDB</a> (Used with permission).</p>
-  <h3>Scraping data</h3>
- <p>We used the <a href = 'http://www.crummy.com/software/BeautifulSoup/'>BeautifulSoup</a> module in Python to assist with web scraping. For this process, we iterated through each page containing scripts on <a href = 'http://www.simplyscripts.com'>SimplyScripts.com</a> and <a href='http://www.dailyscript.com'>DailyScript.com</a>. If a link linked to a script in txt or html format and the website showed valid IMDB number associated with the script, then our program downloads that script and adds the IMDB number to a list. If the script is in HTML format, then we convert it to txt format using the html2text.py file available at <a href ='http://www.aaronsw.com/2002/html2text/'>www.aaronsw.com/2002/html2text/</a>. Finally, before moving on to the next step, we delete duplicates from the list of IMDB numbers, so that for the next steps we only grab information once for each movie.</p>
+        <h3>Collecting additional data from IMBD</h3>
+          <p>We were unable to find information on movie budgets, boxoffice earnings, and academy award nominations/wins on Rotten Tomatoes. IMDB has a strict policy regarding web scraping, but they do offer a set of large files containing metadata available <a href='http://www.imdb.com/help/show_leaf?usedatasoftware'>here</a>. We downloaded the relevant files from there and then manually sorted through them using Excel to get information on the additional fields we needed.</p>
 
+      
       </section>
     </div>
     <footer>
