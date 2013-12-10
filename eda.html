@@ -18,7 +18,7 @@
     <div class="wrapper">
       <header>
         <h1>Scripting for Success in Hollywood</h1>
-        <p>J. Ben Cook, W. Ryan Lee, Conor Myhrvold, and Daniel Newman</p>
+        <p><span class = "nowrap">J. Ben Cook, W. Ryan Lee, Conor Myhrvold, and Daniel Newman</span></p>
         <p class="view"><a href="https://github.com/won1k/cs109">View the Project on GitHub <small>won1k/cs109</small></a></p>
         <ul>
           <li><a href="index.html">Go to <strong>Home</strong></a></li>
@@ -46,14 +46,15 @@
     <li>Oscar Wins</li>
     <li>Oscar Nominations</li>
   </ul>
-  <p>This data is used to create histograms, summary statistics, and other visualizations for use in predictive and LDA analysis in later stages of this project. For example, a histogram of movie genres was created and generated the following:</p>
-  <img src = "masterlist_genres_hist.png" /><br>
-  <p>Additional plots were generated for the number of movies in our data set by year:</p>
-  <img src = "masterlist_years_scatter.png" /><br>
-  <p>as well as for the distribution of movies by runtimes:</p>
-  <img src = "masterlist_runtimes_hist.png" /><br>
+  <p>This data is used to create histograms, summary statistics, and other visualizations for use in predictive and LDA analysis in later stages of this project. In order to create the visualizations, we used the standard <a href="http://matplotlib.org/">matplotlib</a> library, and incorporated the <a href = "http://pandas.pydata.org/">Pandas</a> library for data management and manipulation. For example, a histogram of movie genres was created and generated the following:</p>
+  <center><img src = "masterlist_genres_hist.png" /></center><br>
+  <p>Additional plots were generated for the number of movies in our data set by year, in order to ensure that we had enough sampling from relevant spans of time. A scatterplot was used for visualization to see how the movie counts varied chronologically, and the following graph was generated:</p>
+  <center><img src = "masterlist_years_scatter.png" /></center><br>
+  <p>We also generated a histogram for the distribution of movies by runtimes, which approximated a normal distribution around the mean. This resulted in the following plot:</p>
+  <center><img src = "masterlist_runtimes_hist.png" /></center><br>
   <p>Finally, to examine whether there is any signal in the naive movie budget amounts to predict gross revenues at the box office, a scatterplot was generated, with the result that there is negligible correlation between the two values:</p>
-  <img src = "masterlist_amount_scatter.png" />
+  <center><img src = "masterlist_amount_scatter.png" /></center><br>
+  <p>The final result, with the overlaid line of slope unity, had a Pearson's R2 coefficient of 0.264, which implies a low level of correlation between the budget amount and gross revenues. This gave us the basis for using other factors from the script to try to improve significantly upon this result, potentially without including the budget in the final regression.</p>
 
       </section>
     </div>
