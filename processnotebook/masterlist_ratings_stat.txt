@@ -1,0 +1,3 @@
+Mean: 66.0
+Variance: 5016.66666667
+Standard Variation: 70.8284312029

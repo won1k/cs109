@@ -1,0 +1,12 @@
+Mean (Critics Score): 65.3914141414
+Variance (Critics Score): 940.152350525
+Standard Variation (Critics Score): 30.661903896
+Mean (Audience Score): 71.4974747475
+Variance (Audience Score): 485.047973421
+Standard Variation (Audience Score): 22.023804699
+Mean (Audience Rating): 0.734848484848
+Variance (Audience Rating): 0.194846189164
+Standard Variation (Audience Rating): 0.441413852484
+Mean (Critics Rating): 1.14646464646
+Variance (Critics Rating): 0.741174369962
+Standard Variation (Critics Rating): 0.86091484478

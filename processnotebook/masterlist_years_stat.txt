@@ -1,0 +1,3 @@
+Mean: 6.09230769231
+Variance: 61.0376331361
+Standard Variation: 7.8126585191

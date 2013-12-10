@@ -1,0 +1,6 @@
+Mean (Oscar Nominations): 1.29797979798
+Variance (Oscar Nominations): 4.38090500969
+Standard Variation (Oscar Nominations): 2.09306115766
+Mean (Oscar Wins): 0.535353535354
+Variance (Oscar Wins): 1.95582083461
+Standard Variation (Oscar Wins): 1.39850664446

@@ -1,0 +1,12 @@
+Mean (Ind. Mean): 4.98222502927
+Variance (Ind. Mean): 28.3125042837
+Standard Variation (Ind. Mean): 5.32094956598
+
+Mean (Ind. Var.): 310.987386264
+Variance (Ind. Var.): 641120.591583
+Standard Variation (Ind. Var.): 800.700063434
+
+Mean (Ind. Std.): 10.2019567553
+Variance (Ind. Std.): 206.907464627
+Standard Variation (Ind. Std.): 14.384278384
+

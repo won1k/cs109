@@ -1,0 +1,6 @@
+Mean (Budget): 34467878.141
+Variance (Budget): 1.01860933459e+15
+Standard Variation (Budget): 31915659.7079
+Mean (Gross): 68947074.1154
+Variance (Gross): 6.25783262076e+15
+Standard Variation (Gross): 79106463.8368
