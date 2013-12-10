@@ -57,6 +57,23 @@
 
 	<p>The top ten words for a biased sample of these topics are:</p>
 
+	<center><pre><code>
+
+        Topic  8 |   Topic  16 |   Topics  37
+     ------------------------------------------
+          sword  | battleship  |    brother
+        knights  |  telescope  |   children
+         castle  |   officers  |     sister
+          sarge  |      guard  |      daddy
+         bridge  |       meat  |       baby
+         swords  |     senior  |       told
+          field  |       rank  |   everyone
+         others  |      petty  |       done
+          trees  |     terror  |    alright
+          draws  |  continues  |     always
+
+	      </pre></code><center>
+
 	<p>Now we use logistic regression with L1 regularization to predict the probability that a movie belongs to a given genre. 
 	  Since movies can belong to more than one genre, we run a logistic regression model for each genre.
 	  </p>
@@ -101,7 +118,15 @@ Science Fiction & Fantasy |            0.83         |     0.74    |      104
 
 	<p>Note: results have an element of randomness since the training and test sets are randomly partitioned before each run.</p>
 
-	<p></p>
+	<p>Now we build a Bayesian ridge regression model of gross box office receipts. 
+	  We use the topics we extracted with LDA and other variables that we pulled from movie databases. 
+	  Bayesian ridge regression was chosen in order to avoid overfitting and because we wanted to test a relatively high dimensional model (because of the 50 topics).</p>
+
+	<p>Split data into training and test set, fit the regression model and plot predicted observed test set gross receipts vs. predicted test set gross receipts.</p>
+	<center><img src = "test_set_perf.png" /></center>
+	<p>The test set has the following regression diagnostics:</p>
+	<pre><code>R^2  = 0.525</code></pre>
+	<pre><code>rmse = 0.518</code></pre>
       </section>
     </div>
     <footer>
