@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>CS109 Final Project</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Scripting for Success in Hollywood</h1>
+        <p><span class="nowrap">J. Ben Cook, W. Ryan Lee, Conor Myhrvold, and Daniel Newman</span></p>
+        <p class="view"><a href="https://github.com/won1k/cs109">View the Project on GitHub <small>won1k/cs109</small></a></p>
+        <ul>
+          <li><a href="index.html">Go to <strong>Home</strong></a></li>
+          <li><a href="datacollection.html"><strong>Data</strong> Collection</a></li>
+          <li><a href="eda.html"><strong>Exploratory</strong> Data Analysis</a></li>
+          <li><a href="lda.html"><strong>LDA</strong> Analysis</a></li>
+          <li><a href="https://github.com/won1k/cs109">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h3>
+  <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>LDA Analysis</h3>
+
+  <p>After some pre-processing the length of the scripts follow a fairly Gaussian distribution:</p>
+  <center><img src = "script_length_distro.png" /></center>
+
+  </br>
+
+  <p>In order to reduce the dimensionality of the dataset, we perform Latent Dirichlet Allocation (LDA) on our script corpus to discover the top 50 topics 
+  <a href="http://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf" target="_blank">(Blei, Ng and Jordan, 2003)</a>.</p>
+
+  <p>A document is a vector of words: w = [w<sub>1</sub>,w<sub>2</sub>,…,w<sub>N</sub>], where w<sub>i</sub> is the i<sup>th</sup> word in the sequence. A corpus is a collection of M documents: <br>D = [w<sub>1</sub>,w<sub>2</sub>,…,w<sub>M</sub>]</p>
+
+  <h4>To generate a document:</h4>
+  <ul>
+	<li>Choose θ ∼ Dirichlet(α)</li>
+	<li>For each word in w:</li>
+	<ul>
+	  <li>Choose a topic: z<sub>i</sub> ∼ Multinomial(θ)</li>
+	  <li>Each topic is a distribution over words, meaning that we pick a word w<sub>i</sub> ∼ Multinomial(p<sub>z<sub>i</sub></sub>)</li>
+	</ul>
+  </ul>
+
+	<p>After taking a look at how topics are distributed in our corpus, we use topics as a feature in our regression analyses. 
+	  With our 50 topics, each script gets a score for each topic between 0 and 1 indicating the proportion of the script that was generated form a given topic. 
+	  These are considered numerical features and help us predict genre and box office success.
+	  </p>
+
+	<p>The top ten words for a biased sample of these topics are:</p>
+
+	<center><pre><code>
+
+        Topic  8 |   Topic  16 |   Topics  37
+     ------------------------------------------
+          sword  | battleship  |    brother
+        knights  |  telescope  |   children
+         castle  |   officers  |     sister
+          sarge  |      guard  |      daddy
+         bridge  |       meat  |       baby
+         swords  |     senior  |       told
+          field  |       rank  |   everyone
+         others  |      petty  |       done
+          trees  |     terror  |    alright
+          draws  |  continues  |     always
+
+	      </pre></code></center>
+
+	<p>Now we use logistic regression with L1 regularization to predict the probability that a movie belongs to a given genre. 
+	  Since movies can belong to more than one genre, we run a logistic regression model for each genre.
+	  </p>
+
+  <p>
+    In the following table, prediction success rate is a simple measure of accuracy. It answers the question: 'what is the proportion of times our classifier is correct?' The pure chance column answers the question: 'if we had no additional information, what is the proportion of times we would guess whether or not a movie belongs to a given genre correctly?'
+  </p>
+
+	<center><pre><code>
+                                                                               
+                    Genre | Prediction Success Rate | Pure Chance | Num. Movies
+--------------------------------------------------------------------------------
+       Action & Adventure |            0.77         |     0.68    |      127
+                Animation |            0.98         |     0.97    |       10
+Art House & International |            0.99         |     0.96    |       14
+                 Classics |            0.89         |     0.87    |       50
+                   Comedy |            0.78         |     0.70    |      118
+              Cult Movies |            1.00         |     0.98    |        6
+              Documentary |            0.99         |     0.98    |        7
+                    Drama |            0.79         |     0.50    |      199
+                   Horror |            0.84         |     0.82    |       73
+            Kids & Family |            0.95         |     0.96    |       16
+Musical & Performing Arts |            0.97         |     0.97    |       11
+       Mystery & Suspense |            0.66         |     0.72    |      112
+                  Romance |            0.91         |     0.89    |       43
+Science Fiction & Fantasy |            0.79         |     0.74    |      104
+         Special Interest |            0.99         |     0.99    |        4
+               Television |            0.97         |     0.99    |        5
+                  Western |            1.00         |     0.99    |        4
+		    </pre></code></center>
+
+	<p>
+	  Unsurprisingly, genres that are not well represented in our corpus cannot be predicted very easily. 
+	  That is, without many training examples, it is very difficult to improve on pure guessing. 
+	  Accordingly, we only look at four genres for predicting box office success.
+	  </p>
+
+	<center><pre><code>
+                    Genre | Prediction Success Rate | Pure Chance | Num. Movies
+--------------------------------------------------------------------------------
+       Action & Adventure |            0.69         |     0.68    |      127
+                   Comedy |            0.75         |     0.70    |      118
+                    Drama |            0.77         |     0.50    |      199
+Science Fiction & Fantasy |            0.83         |     0.74    |      104
+		    </pre></code></center>
+
+	<p>Note: results have an element of randomness since the training and test sets are randomly partitioned before each run.</p>
+
+	<p>Now we build a Bayesian ridge regression model of gross box office receipts. 
+	  We use the topics we extracted with LDA and other variables that we pulled from movie databases. 
+	  Bayesian ridge regression was chosen in order to avoid overfitting and because we wanted to test a relatively high dimensional model (because of the 50 topics).</p>
+
+	<p>Finally, we split data into training and test set, fit the regression model, and plot the predicted observed test set gross revenues vs. predicted test set gross revenues, with a line of slope unity overlaid.</p>
+	<center><img src = "test_set_perf.png" /></center><br>
+	<p>The test set has the following regression diagnostics:</p>
+	<pre><code>R<sup>2</sup>  = 0.525</code></pre>
+	<pre><code>rmse = 0.518</code></pre>
+	<p>Where R<sup>2</sup> can be roughly interpreted as the amount of variance explained and RMSE is the root mean squared error.</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/won1k">won1k</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
