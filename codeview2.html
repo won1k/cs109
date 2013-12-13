@@ -1,0 +1,816 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=None">
+  <style type="text/css">
+td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
+pre { line-height: 125%; }
+body .hll { background-color: #ffffcc }
+body  { background: #f8f8f8; }
+body .c { color: #408080; font-style: italic } /* Comment */
+body .err { border: 1px solid #FF0000 } /* Error */
+body .k { color: #008000; font-weight: bold } /* Keyword */
+body .o { color: #666666 } /* Operator */
+body .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+body .cp { color: #BC7A00 } /* Comment.Preproc */
+body .c1 { color: #408080; font-style: italic } /* Comment.Single */
+body .cs { color: #408080; font-style: italic } /* Comment.Special */
+body .gd { color: #A00000 } /* Generic.Deleted */
+body .ge { font-style: italic } /* Generic.Emph */
+body .gr { color: #FF0000 } /* Generic.Error */
+body .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+body .gi { color: #00A000 } /* Generic.Inserted */
+body .go { color: #888888 } /* Generic.Output */
+body .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+body .gs { font-weight: bold } /* Generic.Strong */
+body .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+body .gt { color: #0044DD } /* Generic.Traceback */
+body .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+body .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+body .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+body .kp { color: #008000 } /* Keyword.Pseudo */
+body .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+body .kt { color: #B00040 } /* Keyword.Type */
+body .m { color: #666666 } /* Literal.Number */
+body .s { color: #BA2121 } /* Literal.String */
+body .na { color: #7D9029 } /* Name.Attribute */
+body .nb { color: #008000 } /* Name.Builtin */
+body .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+body .no { color: #880000 } /* Name.Constant */
+body .nd { color: #AA22FF } /* Name.Decorator */
+body .ni { color: #999999; font-weight: bold } /* Name.Entity */
+body .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+body .nf { color: #0000FF } /* Name.Function */
+body .nl { color: #A0A000 } /* Name.Label */
+body .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+body .nt { color: #008000; font-weight: bold } /* Name.Tag */
+body .nv { color: #19177C } /* Name.Variable */
+body .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+body .w { color: #bbbbbb } /* Text.Whitespace */
+body .mf { color: #666666 } /* Literal.Number.Float */
+body .mh { color: #666666 } /* Literal.Number.Hex */
+body .mi { color: #666666 } /* Literal.Number.Integer */
+body .mo { color: #666666 } /* Literal.Number.Oct */
+body .sb { color: #BA2121 } /* Literal.String.Backtick */
+body .sc { color: #BA2121 } /* Literal.String.Char */
+body .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+body .s2 { color: #BA2121 } /* Literal.String.Double */
+body .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+body .sh { color: #BA2121 } /* Literal.String.Heredoc */
+body .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+body .sx { color: #008000 } /* Literal.String.Other */
+body .sr { color: #BB6688 } /* Literal.String.Regex */
+body .s1 { color: #BA2121 } /* Literal.String.Single */
+body .ss { color: #19177C } /* Literal.String.Symbol */
+body .bp { color: #008000 } /* Name.Builtin.Pseudo */
+body .vc { color: #19177C } /* Name.Variable.Class */
+body .vg { color: #19177C } /* Name.Variable.Global */
+body .vi { color: #19177C } /* Name.Variable.Instance */
+body .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+  </style>
+</head>
+<body>
+<h2></h2>
+
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">%This code has been prepared to support the simulations presented in the paper &quot;Commercializing biomedical research through securitization tecniques&quot; (Jose-Maria Fernandez, Roger M. Stein, Andrew W.Lo; Nature Biotechnology; 2012). We want to thank David Fagnan, Lloyd Han, James Noraky, Allister Bernard and Ashutosh Singhal for their excellent coding support work. </span>
+<span style="color: #408080; font-style: italic">%Input:</span>
+<span style="color: #408080; font-style: italic">%@show_progress is of type boolean and if true displays a status bar of the current simulation</span>
+<span style="color: #408080; font-style: italic">%@params is of type struct and is parameter object which is the output of the init_params_fn function (optional)</span>
+<span style="color: #408080; font-style: italic">%Output:</span>
+<span style="color: #408080; font-style: italic">%@results is of type struct and provides details of each simulation run</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span>results =<span style="color: #bbbbbb"> </span><span style="color: #0000FF">simulate_CFs_fn</span>(show_progress, params)<span style="color: #bbbbbb"></span>
+
+<span style="color: #408080; font-style: italic">%Nested Function</span>
+<span style="color: #408080; font-style: italic">%Accesses params</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb">  </span>svc_due_this_per =<span style="color: #bbbbbb"> </span><span style="color: #0000FF">calc_svc_due_this_per_ffn</span>(values)<span style="color: #bbbbbb">    </span>
+<span style="color: #bbbbbb">    </span>svc_due_this_per = params.bonds.servicing_rate<span style="color: #666666">.*</span>sum(values);
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Nested function</span>
+<span style="color: #408080; font-style: italic">%Accesses params,bond_value</span>
+<span style="color: #408080; font-style: italic">%Changes A1_in_default, A2_in_default</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span>default =<span style="color: #bbbbbb"> </span><span style="color: #0000FF">check_for_default_ffn</span>(cur_per,cur_cash)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>svc_due  = calc_svc_due_this_per_ffn(bond_value) <span style="color: #666666">+</span> unpaid_svc<span style="color: #666666">*</span>(<span style="color: #666666">1+</span>params.bonds.svc_accrual_int_rate);
+    A1_cash_required = AMORT_SCHED(<span style="color: #666666">1</span>,cur_per)<span style="color: #666666">+</span>bond_value(<span style="color: #666666">1</span>)<span style="color: #666666">*</span>bonds.coupon(<span style="color: #666666">1</span>);
+    A2_cash_required = AMORT_SCHED(<span style="color: #666666">2</span>,cur_per)<span style="color: #666666">+</span>bond_value(<span style="color: #666666">2</span>)<span style="color: #666666">*</span>bonds.coupon(<span style="color: #666666">2</span>);
+    <span style="color: #008000; font-weight: bold">if</span>(cur_cash<span style="color: #666666">&lt;</span>svc_due)
+        svc_in_default = true;
+        <span style="color: #008000; font-weight: bold">if</span>(bond_value(<span style="color: #666666">1</span>)<span style="color: #666666">&gt;0</span>) 
+            A1_in_default = true;
+        <span style="color: #008000; font-weight: bold">end</span>
+        <span style="color: #008000; font-weight: bold">if</span>(bond_value(<span style="color: #666666">2</span>)<span style="color: #666666">&gt;0</span>)
+            A2_in_default = true;
+        <span style="color: #008000; font-weight: bold">end</span>
+    <span style="color: #008000; font-weight: bold">elseif</span>(cur_cash<span style="color: #666666">&lt;</span>svc_due<span style="color: #666666">+</span>A1_cash_required)
+        A1_in_default = true;
+        <span style="color: #008000; font-weight: bold">if</span>(bond_value(<span style="color: #666666">2</span>)<span style="color: #666666">&gt;0</span>)
+            A2_in_default = true;
+        <span style="color: #008000; font-weight: bold">end</span>
+    <span style="color: #008000; font-weight: bold">elseif</span>((cur_cash<span style="color: #666666">&lt;</span>svc_due<span style="color: #666666">+</span>A1_cash_required<span style="color: #666666">+</span>A2_cash_required) <span style="color: #666666">&amp;&amp;</span> (bond_value(<span style="color: #666666">2</span>)<span style="color: #666666">&gt;0</span>))
+        A2_in_default = true;
+    <span style="color: #008000; font-weight: bold">end</span>
+    default = svc_in_default <span style="color: #666666">||</span> A1_in_default <span style="color: #666666">||</span> A2_in_default;
+    
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Nested function</span>
+<span style="color: #408080; font-style: italic">%Changes interest_paid, </span>
+<span style="color: #408080; font-style: italic">%Accesses params</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span>[cur_cash] =<span style="color: #bbbbbb"> </span><span style="color: #0000FF">pay_principal_ffn</span>(cur_per,cur_cash)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">   </span><span style="color: #408080; font-style: italic">%PAY P&amp;I</span>
+   <span style="color: #008000; font-weight: bold">for</span>(b = <span style="color: #666666">1</span>:NBONDS) <span style="color: #408080; font-style: italic">%pay principal</span>
+       P = AMORT_SCHED(b,cur_per);
+       principal_paid(b,cur_per) = min(P,cur_cash);
+       cur_cash        = cur_cash<span style="color: #666666">-</span>principal_paid(b,cur_per);
+       bond_value(b)       = bond_value(b)<span style="color: #666666">-</span>principal_paid(b,cur_per);
+       <span style="color: #008000; font-weight: bold">if</span>(bond_value(b)<span style="color: #666666">&lt;0.0001</span>)
+           bond_value(b)   = <span style="color: #666666">0</span>;
+       <span style="color: #008000; font-weight: bold">end</span>
+       
+   <span style="color: #008000; font-weight: bold">end</span>
+   
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Nested function</span>
+<span style="color: #408080; font-style: italic">%Changes interest_paid</span>
+<span style="color: #408080; font-style: italic">%Accesses params</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span>[cur_cash] =<span style="color: #bbbbbb"> </span><span style="color: #0000FF">pay_interest_ffn</span>(cur_per,cur_cash)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">for</span>(b = <span style="color: #666666">1</span>:NBONDS) <span style="color: #408080; font-style: italic">% pay int</span>
+        I = bonds.coupon(b)<span style="color: #666666">*</span>bond_value(b);
+		interest_paid(b,cur_per) = min(I,cur_cash); 
+		cur_cash       = cur_cash<span style="color: #666666">-</span>interest_paid(b,cur_per);
+    <span style="color: #008000; font-weight: bold">end</span>			 
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Nested function</span>
+<span style="color: #408080; font-style: italic">%Changes unpaid_svc</span>
+<span style="color: #408080; font-style: italic">%Accesses params, in_default, bond_value, unpaid_svc, history_service, unpaid_svc</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span>[cur_cash ] =<span style="color: #bbbbbb"> </span><span style="color: #0000FF">pay_servicing_ffn</span>(cur_per,cur_cash)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>svc_OK    = true;
+    <span style="color: #008000; font-weight: bold">if</span> (<span style="color: #666666">~</span>in_default)
+        svc_due_this_per  = calc_svc_due_this_per_ffn(bond_value);
+        svc_past_due      = unpaid_svc<span style="color: #666666">*</span>(<span style="color: #666666">1+</span>params.bonds.svc_accrual_int_rate);
+        svc_due           = svc_due_this_per <span style="color: #666666">+</span> svc_past_due;
+        svc_paid          = min(svc_due,cur_cash);
+
+        <span style="color: #408080; font-style: italic">%update main function variables</span>
+        history_service(s) =  history_service(s) <span style="color: #666666">+</span> svc_paid;
+        unpaid_svc         =  <span style="color: #008000">round</span>((svc_due<span style="color: #666666">-</span>svc_paid)<span style="color: #666666">*10</span>^<span style="color: #666666">5</span>)<span style="color: #666666">/10</span>^<span style="color: #666666">5</span>;
+        cur_cash       	   =  cur_cash<span style="color: #666666">-</span>svc_paid;
+    <span style="color: #008000; font-weight: bold">end</span>
+ 
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Nested function</span>
+<span style="color: #408080; font-style: italic">%Accesses NPERS, unpaid_svc, bond_value, params, AMORT_SCHED</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span>[IC_ratio cash_due K ] =<span style="color: #bbbbbb"> </span><span style="color: #0000FF">ic_test_result_ffn</span>(b, i, cur_cash)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">if</span> (<span style="color: #008000">i</span> <span style="color: #666666">~=</span>NPERS)
+        sched_svc = unpaid_svc;
+        bv = bond_value(b);
+        K  = cur_cash;
+        <span style="color: #408080; font-style: italic">%For bonds after the first, must subtract cash paid for previous</span>
+        <span style="color: #408080; font-style: italic">%bonds.</span>
+        <span style="color: #008000; font-weight: bold">if</span> (b<span style="color: #666666">&gt;1</span>)
+            <span style="color: #008000; font-weight: bold">for</span>(bb = <span style="color: #666666">1</span>:(b<span style="color: #666666">-1</span>))
+                btemp = bond_value(bb);
+                N = min(params.bonds.IC_pers,NPERS<span style="color: #666666">-</span><span style="color: #008000">i</span>);
+                <span style="color: #008000; font-weight: bold">for</span>(m = <span style="color: #666666">1</span>:N)
+                    K = K<span style="color: #666666">-</span>AMORT_SCHED(bb,<span style="color: #008000">i</span><span style="color: #666666">+</span>m)<span style="color: #666666">-</span>params.bonds.coupon(bb)<span style="color: #666666">*</span>btemp<span style="color: #666666">-</span>params.bonds.servicing_rate<span style="color: #666666">*</span>btemp;
+                    btemp = btemp<span style="color: #666666">-</span>AMORT_SCHED(bb,<span style="color: #008000">i</span><span style="color: #666666">+</span>m);
+                <span style="color: #008000; font-weight: bold">end</span>
+            <span style="color: #008000; font-weight: bold">end</span>
+        <span style="color: #008000; font-weight: bold">end</span>
+        sched_P  =  <span style="color: #666666">0</span>;
+        sched_I  =  <span style="color: #666666">0</span>;
+       
+        <span style="color: #008000; font-weight: bold">for</span>(m = <span style="color: #666666">1</span>:min(params.bonds.IC_pers,NPERS<span style="color: #666666">-</span><span style="color: #008000">i</span>))
+            sched_P =  sched_P <span style="color: #666666">+</span> AMORT_SCHED(b,<span style="color: #008000">i</span><span style="color: #666666">+</span>m);
+            sched_I =  sched_I <span style="color: #666666">+</span> params.bonds.coupon(b)<span style="color: #666666">*</span>bv;
+            sched_svc = sched_svc<span style="color: #666666">+</span>params.bonds.servicing_rate<span style="color: #666666">*</span>bv;
+            bv = bv<span style="color: #666666">-</span>AMORT_SCHED(b,<span style="color: #008000">i</span><span style="color: #666666">+</span>m);		
+        <span style="color: #008000; font-weight: bold">end</span>
+        cash_due = sched_P<span style="color: #666666">+</span>sched_I<span style="color: #666666">+</span>sched_svc;
+        IC_ratio = K<span style="color: #666666">/</span>cash_due;
+    <span style="color: #008000; font-weight: bold">else</span>
+        IC_ratio = params.bonds.interest_coverage(b);
+        cash_due = <span style="color: #666666">0</span>;
+        K = cur_cash;
+    <span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Nested function</span>
+<span style="color: #408080; font-style: italic">%Changes compounds,cash,sales,sale_times, sell_value or extra_cash_from_coverage,time_in_phase</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">update_sale</span>(price,remaining_indxs,cur_per,forCoverage)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>phase_idxs = phase2index_fn(compounds(remaining_indxs));
+    sale_per  = min(cur_per<span style="color: #666666">+</span><span style="color: #008000">ceil</span>(params.assets.sale_time(phase_idxs)), HORIZON);
+    
+    <span style="color: #008000; font-weight: bold">if</span>(<span style="color: #666666">~</span>forCoverage)
+        sell_value(remaining_indxs) = price;
+    <span style="color: #008000; font-weight: bold">end</span>
+    [uniquePhase,<span style="color: #666666">~</span>,temp_indx] = unique(phase_idxs);
+    uniqueCounts = <span style="color: #008000">accumarray</span>(temp_indx(:),<span style="color: #666666">1</span>,[],@sum)<span style="color: #666666">&#39;</span>; 
+	
+	<span style="color: #408080; font-style: italic">%update main function vars</span>
+    sales(s,uniquePhase) = sales(s,uniquePhase) <span style="color: #666666">+</span> uniqueCounts;
+    sale_times(s,cur_per) = sale_times(s,cur_per)<span style="color: #666666">+</span>sum(uniqueCounts);
+    [uniquePer,<span style="color: #666666">~</span>,<span style="color: #666666">~</span>] = unique(sale_per);
+    <span style="color: #008000; font-weight: bold">for</span> loop = uniquePer
+        cash(loop) = cash(loop) <span style="color: #666666">+</span> sum(price(loop<span style="color: #666666">==</span>sale_per));
+        <span style="color: #008000; font-weight: bold">if</span>(forCoverage)
+            extra_cash_from_coverage(s,loop) = extra_cash_from_coverage(s,loop)<span style="color: #666666">+</span>sum(price(loop<span style="color: #666666">==</span>sale_per)); 
+        <span style="color: #008000; font-weight: bold">end</span>
+    <span style="color: #008000; font-weight: bold">end</span>
+    [compounds{remaining_indxs}] =  deal(<span style="color: #BA2121">&#39;SLD&#39;</span>);
+    time_in_phase(remaining_indxs) = <span style="color: #666666">0</span>;
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Nested Function</span>
+<span style="color: #408080; font-style: italic">%Accesses NCOMPOUNDS, compounds, params, HORIZON, rho, z, equity_in_compound, invested, invest_cost, time_in_phase, sell_value, sales, sale_times, cash</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">liquidate_portfolio_ffn</span>(cur_per)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>remaining_indxs = <span style="color: #666666">~</span>(strcmp(compounds,<span style="color: #BA2121">&#39;DSC1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC5&#39;</span>)) <span style="color: #666666">&amp;</span> <span style="color: #666666">~</span>strcmp(compounds,<span style="color: #BA2121">&#39;SLD&#39;</span>);
+    <span style="color: #008000; font-weight: bold">if</span>(<span style="color: #666666">~</span>any(remaining_indxs))
+        <span style="color: #008000; font-weight: bold">return</span>
+    <span style="color: #008000; font-weight: bold">end</span>
+
+    phase_idxs = phase2index_fn( compounds(remaining_indxs));
+    mx       = params.assets.pricing_params(phase_idxs, params.assets.pricing_params_col.(<span style="color: #BA2121">&#39;vmx&#39;</span>));
+    mu       = params.assets.pricing_params(phase_idxs, params.assets.pricing_params_col.(<span style="color: #BA2121">&#39;vmu&#39;</span>));
+    sigma    = params.assets.pricing_params(phase_idxs, params.assets.pricing_params_col.(<span style="color: #BA2121">&#39;vsigma&#39;</span>));
+    price    = compound_sale_price_fn(mu, sigma, mx, rho, z)<span style="color: #666666">.*</span>equity_in_compound(remaining_indxs);
+    
+    <span style="color: #408080; font-style: italic">% here is where we adjust for uninvested compounds</span>
+    rem_inv_cost = invest_cost(remaining_indxs);
+    rem_not_invested = <span style="color: #666666">~</span>invested(remaining_indxs);
+    price(rem_not_invested) = max(price(rem_not_invested)<span style="color: #666666">-</span>rem_inv_cost(rem_not_invested),<span style="color: #666666">0</span>);
+    
+    <span style="color: #408080; font-style: italic">%adjust for compounds that have not transitioned at all until liquidation</span>
+    rem_not_transitioned = time_in_phase(remaining_indxs)<span style="color: #666666">==</span>cur_per<span style="color: #666666">-1</span>;
+    price(rem_not_transitioned) = price(rem_not_transitioned)<span style="color: #666666">*</span>params.assets.ratio_unchanged;
+
+    <span style="color: #408080; font-style: italic">% update bookkeeping AND cash AND compounds.</span>
+    update_sale(price,remaining_indxs,cur_per,false)
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Nested Function</span>
+<span style="color: #408080; font-style: italic">%Accesses params, compounds, HORIZON, equity_in_compound, invested, invest_cost, s, cash, time_in_phase, extra_cash_from_coverage, sales, sale_times</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">sell_compounds_to_cover_shortfall_ffn</span>(shortfall,cur_per)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span><span style="color: #408080; font-style: italic">%  We simply sell the most mature compounds first</span>
+    remaining_comp_idx = <span style="color: #666666">~</span>(strcmp(compounds,<span style="color: #BA2121">&#39;DSC1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC5&#39;</span>)) <span style="color: #666666">&amp;</span> <span style="color: #666666">~</span>strcmp(compounds,<span style="color: #BA2121">&#39;SLD&#39;</span>);
+    <span style="color: #008000; font-weight: bold">if</span>(<span style="color: #666666">~</span>any(remaining_comp_idx))
+        <span style="color: #008000; font-weight: bold">return</span>
+    <span style="color: #008000; font-weight: bold">end</span>
+    
+    phase_idxs 	= phase2index_fn(compounds(remaining_comp_idx));
+    mx       	= params.assets.pricing_params(phase_idxs, params.assets.pricing_params_col.(<span style="color: #BA2121">&#39;vmx&#39;</span>));
+    mu       	= params.assets.pricing_params(phase_idxs, params.assets.pricing_params_col.(<span style="color: #BA2121">&#39;vmu&#39;</span>));
+    sigma   	= params.assets.pricing_params(phase_idxs, params.assets.pricing_params_col.(<span style="color: #BA2121">&#39;vsigma&#39;</span>));
+    prices   	= compound_sale_price_fn(mu, sigma, mx, rho, z)<span style="color: #666666">.*</span>equity_in_compound(remaining_comp_idx);
+            
+    <span style="color: #408080; font-style: italic">% here is where we adjust for uninvested compounds</span>
+    rem_inv_cost 			= invest_cost(remaining_comp_idx);
+    rem_not_invested		= <span style="color: #666666">~</span>invested(remaining_comp_idx);   
+    prices(rem_not_invested)= max(prices(rem_not_invested)<span style="color: #666666">-</span>rem_inv_cost(rem_not_invested),<span style="color: #666666">0</span>);
+	
+    [<span style="color: #666666">~</span>, sorted_idx] 		= sort(prices,<span style="color: #BA2121">&#39;descend&#39;</span>);
+    cumSale 				= cumsum(prices(sorted_idx));
+    numSold 				= <span style="color: #008000">find</span>(cumSale<span style="color: #666666">&gt;</span>=shortfall,<span style="color: #666666">1</span>);
+    <span style="color: #008000; font-weight: bold">if</span>(<span style="color: #008000">isempty</span>(numSold))
+        numSold = <span style="color: #008000">length</span>(prices);
+    <span style="color: #008000; font-weight: bold">end</span>
+    indxSold 				= sorted_idx(<span style="color: #666666">1</span>:numSold);
+    remaining_comp_loc 		= <span style="color: #008000">find</span>(remaining_comp_idx);
+    
+	<span style="color: #408080; font-style: italic">% update bookkeeping AND cash AND compounds.</span>
+    update_sale(prices(indxSold),remaining_comp_loc(indxSold),cur_per,true);     
+<span style="color: #008000; font-weight: bold">end</span>
+
+
+<span style="color: #408080; font-style: italic">%This needs to be a nested-function within simulate_CFs_fn</span>
+<span style="color: #408080; font-style: italic">%Accesses </span>
+<span style="color: #408080; font-style: italic">%compounds, invested, params, sales, sale_times, cash, time_in_phase, HORIZON, equity_in_compound, invest_cost, sell_value, s, z</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span>prices =<span style="color: #bbbbbb"> </span><span style="color: #0000FF">sell_compound_ffn</span>(comp_idx, cur_per)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>remaining_comp_idx = comp_idx <span style="color: #666666">&amp;</span> <span style="color: #666666">~</span>(strcmp(compounds,<span style="color: #BA2121">&#39;DSC1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC5&#39;</span>)) <span style="color: #666666">&amp;</span> <span style="color: #666666">~</span>strcmp(compounds,<span style="color: #BA2121">&#39;SLD&#39;</span>);
+    <span style="color: #008000; font-weight: bold">if</span>(<span style="color: #666666">~</span>any(remaining_comp_idx))
+        prices = [];
+        <span style="color: #008000; font-weight: bold">return</span>
+    <span style="color: #008000; font-weight: bold">end</span>
+
+    phase_idxs  = phase2index_fn( compounds(remaining_comp_idx));
+    mx       	= params.assets.pricing_params(phase_idxs, params.assets.pricing_params_col.(<span style="color: #BA2121">&#39;vmx&#39;</span>));
+    mu       	= params.assets.pricing_params(phase_idxs, params.assets.pricing_params_col.(<span style="color: #BA2121">&#39;vmu&#39;</span>));
+    sigma    	= params.assets.pricing_params(phase_idxs, params.assets.pricing_params_col.(<span style="color: #BA2121">&#39;vsigma&#39;</span>));
+    prices    	= compound_sale_price_fn(mu, sigma, mx, rho, z)<span style="color: #666666">.*</span>equity_in_compound(remaining_comp_idx);
+    
+    <span style="color: #408080; font-style: italic">% here is where we adjust for uninvested compounds</span>
+    rem_inv_cost 	 = invest_cost(remaining_comp_idx);
+    rem_not_invested = <span style="color: #666666">~</span>invested(remaining_comp_idx);   
+    prices(rem_not_invested) = max(prices(rem_not_invested)<span style="color: #666666">-</span>rem_inv_cost(rem_not_invested),<span style="color: #666666">0</span>);
+    
+	<span style="color: #408080; font-style: italic">% update bookkeeping AND cash AND compounds.</span>
+    update_sale(prices,remaining_comp_idx,cur_per,false);
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Nested function</span>
+<span style="color: #408080; font-style: italic">%Changes withdrawals, withdrawal_times</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">withdraw_compound_ffn</span>(old_phase,cur_per)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>[uniq_tmp,<span style="color: #666666">~</span>,unique_idx] = unique(old_phase);
+    uniq_cnt = <span style="color: #008000">accumarray</span>(unique_idx(:),<span style="color: #666666">1</span>,[],@sum)<span style="color: #666666">&#39;</span>; 
+    <span style="color: #008000; font-weight: bold">for</span> lp = <span style="color: #666666">1</span>:<span style="color: #008000">length</span>(uniq_tmp)
+        withdrawals(s,withdrawals_col.(uniq_tmp{lp}))  = withdrawals(s,withdrawals_col.(uniq_tmp{lp})) <span style="color: #666666">+</span> uniq_cnt(lp);
+    <span style="color: #008000; font-weight: bold">end</span>
+    withdrawal_times(s, cur_per)    = withdrawal_times(s,cur_per) <span style="color: #666666">+</span> sum(uniq_cnt);		
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Nested function</span>
+<span style="color: #408080; font-style: italic">%Accesses compounds</span>
+<span style="color: #408080; font-style: italic">%Changes  invested, invest_cost, time_in_phase</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">transition_compound_ffn</span>(idx)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>ndaidx 					= strcmp(compounds,<span style="color: #BA2121">&#39;NDA1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;NDA2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;NDA3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;NDA4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;NDA5&#39;</span>);
+    invested(ndaidx <span style="color: #666666">&amp;</span> idx)  = true;	
+    invested(<span style="color: #666666">~</span>ndaidx <span style="color: #666666">&amp;</span> idx) = false;
+    cindx             		= phase2index_fn(compounds(<span style="color: #666666">~</span>ndaidx <span style="color: #666666">&amp;</span> idx));
+    invest_cost(<span style="color: #666666">~</span>ndaidx <span style="color: #666666">&amp;</span> idx)   = trial_cost_fn(compounds(<span style="color: #666666">~</span>ndaidx <span style="color: #666666">&amp;</span> idx), params) <span style="color: #666666">+</span> params.assets.pricing_params(cindx,params.assets.pricing_params_col.(<span style="color: #BA2121">&#39;Milestone&#39;</span>))<span style="color: #666666">&#39;</span>;
+    time_in_phase(idx) 		= <span style="color: #666666">0</span>;
+<span style="color: #008000; font-weight: bold">end</span>
+
+    tStart = tic;
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">~</span>exist(<span style="color: #BA2121">&#39;params&#39;</span>,<span style="color: #BA2121">&#39;var&#39;</span>)
+        params = init_params_fn_ryan_v2();
+    <span style="color: #008000; font-weight: bold">end</span>
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">~</span>exist(<span style="color: #BA2121">&#39;show_progress&#39;</span>,<span style="color: #BA2121">&#39;var&#39;</span>)
+        show_progress = true;
+    <span style="color: #008000; font-weight: bold">end</span>
+    
+    <span style="color: #008000; font-weight: bold">if</span> show_progress
+        prog_bar_click = <span style="color: #008000">round</span>(params.simu.NSIMUS<span style="color: #666666">/10</span>);
+    <span style="color: #008000; font-weight: bold">end</span>
+
+
+    <span style="color: #408080; font-style: italic">%setup global variables and constants</span>
+    simu                  = params.simu;
+    assets                = params.assets;
+    bonds                 = params.bonds;
+   	NSIMUS                = simu.NSIMUS;
+   	NPERS                 = simu.TIMESTEPS;
+   	HORIZON               = NPERS<span style="color: #666666">+</span><span style="color: #008000">ceil</span>(max(assets.sale_time));
+   	NCOMPOUNDS            = sum(simu.initial_compounds) ;
+	ALL_POSSIBLE_STATES   = fieldnames(assets.trans_prob_col); <span style="color: #408080; font-style: italic">%c(&quot;DSC&quot;,&quot;PRE&quot;,&quot;P1&quot;,&quot;P2&quot;,&quot;P3&quot;,&quot;NDA&quot;,&quot;APP&quot;)</span>
+	NSTATES               = <span style="color: #008000">length</span>(simu.initial_compounds); 
+	NBONDS                = <span style="color: #008000">length</span>(bonds.capital_structure)<span style="color: #666666">-1</span>;
+	STARTING_STATES       = <span style="color: #008000">repmat</span>({<span style="color: #BA2121">&#39;DSC1&#39;</span>},<span style="color: #666666">1</span>, simu.initial_compounds(<span style="color: #666666">1</span>)) ;
+	AMORT_SCHED           = <span style="color: #008000">zeros</span>(NBONDS,NPERS);
+
+	<span style="color: #008000; font-weight: bold">for</span> ctr = <span style="color: #666666">2</span>:NSTATES
+		phase   =  ALL_POSSIBLE_STATES(ctr);
+        tmpcell = <span style="color: #008000">repmat</span>(phase, <span style="color: #666666">1</span>, simu.initial_compounds(ctr));
+		STARTING_STATES = {STARTING_STATES{:} tmpcell{:} };
+	<span style="color: #008000; font-weight: bold">end</span>
+    
+	temp_bond_value = bonds.nominal;
+	<span style="color: #008000; font-weight: bold">for</span> cctr = <span style="color: #666666">1</span>:NPERS
+		<span style="color: #008000; font-weight: bold">for</span> rctr = <span style="color: #666666">1</span>:NBONDS
+			AMORT_SCHED(rctr,cctr) = calc_amort_pmt_due_fn(cctr, <span style="color: #408080; font-style: italic">...</span>
+            bonds.amort_timing(rctr,bonds.amort_timing_col.start), <span style="color: #408080; font-style: italic">...</span>
+            bonds.amort_timing(rctr,bonds.amort_timing_col.stop), <span style="color: #408080; font-style: italic">...</span>
+            bonds.nominal(rctr), temp_bond_value(rctr));
+			temp_bond_value(rctr)  = temp_bond_value(rctr) <span style="color: #666666">-</span> AMORT_SCHED(rctr,cctr);
+		<span style="color: #008000; font-weight: bold">end</span>
+    <span style="color: #008000; font-weight: bold">end</span>
+    
+    <span style="color: #408080; font-style: italic">% ----------------------------------</span>
+
+	rho               	= assets.rho;
+	bond_value        	= bonds.nominal;
+
+	invested            = true(<span style="color: #666666">1</span>,NCOMPOUNDS);
+	sell_value          = <span style="color: #008000">zeros</span>(<span style="color: #666666">1</span>,NCOMPOUNDS);
+	equity_in_compound  = <span style="color: #008000">ones</span>(<span style="color: #666666">1</span>,NCOMPOUNDS)<span style="color: #666666">.*</span>assets.equity_stake;
+	compounds           = STARTING_STATES;
+	time_in_phase       = <span style="color: #008000">zeros</span>(<span style="color: #666666">1</span>,NCOMPOUNDS);
+	first_cash          = simu.initial_cash;
+	
+	<span style="color: #408080; font-style: italic">% state of securities  </span>
+	IC_ratio            = <span style="color: #008000">zeros</span>(<span style="color: #008000">length</span>(bonds.nominal), NPERS);
+	
+	<span style="color: #408080; font-style: italic">%record keeping </span>
+	sales     			= <span style="color: #008000">zeros</span>(NSIMUS, NSTATES);
+    sales_row 			= makeVectorLabels(<span style="color: #008000">repmat</span>({<span style="color: #BA2121">&#39;a&#39;</span>},<span style="color: #666666">1</span>,NSIMUS),true);
+    sales_col 			= makeVectorLabels(ALL_POSSIBLE_STATES);
+
+	withdrawals       	= <span style="color: #008000">zeros</span>(NSIMUS, NSTATES);
+    withdrawals_row   	= sales_row;
+    withdrawals_col   	= sales_col;
+
+	sale_times      	= <span style="color: #008000">zeros</span>(NSIMUS, HORIZON);
+    sale_times_row   	= sales_row;
+    sale_times_col   	= makeVectorLabels(<span style="color: #008000">repmat</span>({<span style="color: #BA2121">&#39;S&#39;</span>},<span style="color: #666666">1</span>,HORIZON),true);
+
+	withdrawal_times       		= <span style="color: #008000">zeros</span>(NSIMUS, HORIZON);
+    withdrawal_times_row   		= sales_row;
+    withdrawal_times_col   		= sale_times_col;
+
+	compounds_to_fund       	= <span style="color: #008000">zeros</span>(NSIMUS, HORIZON);
+    compounds_to_fund_row   	= sales_row;
+    compounds_to_fund_col   	= sale_times_col;
+
+	compounds_funded       		= <span style="color: #008000">zeros</span>(NSIMUS, HORIZON);
+    compounds_funded_row   		= sales_row;
+    compounds_funded_col   		= sale_times_col;
+
+	compounds_bought       		= <span style="color: #008000">zeros</span>(NSIMUS, NSTATES);
+    compounds_bought_row   		= sales_row;
+    compounds_bought_col   		= sales_col;
+
+	final_compounds       		= <span style="color: #008000">zeros</span>(<span style="color: #666666">1</span>, NSTATES);
+    
+	extra_cash_from_coverage	= <span style="color: #008000">zeros</span>(NSIMUS,HORIZON) ;
+	cash_for_investment         = <span style="color: #008000">zeros</span>(NSIMUS,NPERS);
+	interest_paid	            = <span style="color: #008000">zeros</span>(<span style="color: #008000">length</span>(bonds.nominal), NPERS);
+	principal_paid              = <span style="color: #008000">zeros</span>(<span style="color: #008000">length</span>(bonds.nominal), NPERS);
+	history_service		        = <span style="color: #008000">zeros</span>(NSIMUS,<span style="color: #666666">1</span>);
+	cash_realized	            = <span style="color: #008000">zeros</span>(NSIMUS,HORIZON);
+	cash_begin_per              = <span style="color: #008000">zeros</span>(NSIMUS,HORIZON);
+    
+	A1_realized_vals            = <span style="color: #008000">zeros</span>(NSIMUS,NPERS);
+	A2_realized_vals            = <span style="color: #008000">zeros</span>(NSIMUS,NPERS);
+	A1_paid                     = <span style="color: #008000">zeros</span>(NSIMUS,NPERS);
+	A2_paid                     = <span style="color: #008000">zeros</span>(NSIMUS,NPERS);
+	A1_defaults                 = true(<span style="color: #666666">1</span>,NSIMUS);
+	A2_defaults                 = true(<span style="color: #666666">1</span>,NSIMUS);
+    svc_defaults                = true(<span style="color: #666666">1</span>,NSIMUS);
+	return_on_equity            = <span style="color: #008000">zeros</span>(<span style="color: #666666">1</span>,NSIMUS);
+
+	<span style="color: #008000; font-weight: bold">if</span> (show_progress) 
+        fprintf(<span style="color: #666666">1</span>,<span style="color: #BA2121">&#39;Simulation of %d paths: 0%% complete\n&#39;</span>,NSIMUS);
+    <span style="color: #008000; font-weight: bold">end</span>
+
+    <span style="color: #008000; font-weight: bold">for</span> s = <span style="color: #666666">1</span> : NSIMUS
+		<span style="color: #008000; font-weight: bold">if</span>(show_progress) 
+			<span style="color: #008000; font-weight: bold">if</span> (<span style="color: #008000">mod</span>(s,prog_bar_click) <span style="color: #666666">==</span> <span style="color: #666666">0</span>)
+                fprintf(<span style="color: #666666">1</span>,<span style="color: #BA2121">&#39;Simulation %4.0f%% complete\n&#39;</span>, (s<span style="color: #666666">/</span>NSIMUS)<span style="color: #666666">*100</span>);
+            <span style="color: #008000; font-weight: bold">end</span>
+        <span style="color: #008000; font-weight: bold">end</span>
+		
+		<span style="color: #408080; font-style: italic">% reset variables for next path of simulation</span>
+		NCOMPOUNDS 			= sum(simu.initial_compounds);
+		
+		<span style="color: #408080; font-style: italic">% state of compounds</span>
+		invested    		= true(<span style="color: #666666">1</span>,NCOMPOUNDS);
+		compounds   		= STARTING_STATES;
+		time_in_phase 		= <span style="color: #008000">zeros</span>(<span style="color: #666666">1</span>,NCOMPOUNDS);
+	
+		sell_value    		= <span style="color: #008000">zeros</span>(<span style="color: #666666">1</span>,NCOMPOUNDS);
+		equity_in_compound 	= <span style="color: #008000">ones</span>(<span style="color: #666666">1</span>,NCOMPOUNDS)<span style="color: #666666">.*</span>assets.equity_stake;
+
+		<span style="color: #408080; font-style: italic">% state of securities</span>
+		cash			  	= <span style="color: #008000">zeros</span>(<span style="color: #666666">1</span>,HORIZON);
+		
+		IC_ratio        	= <span style="color: #008000">zeros</span>(<span style="color: #008000">length</span>(bonds.nominal)<span style="color: #666666">-1</span>, NPERS);
+		IC_shortfall   		= <span style="color: #008000">zeros</span>(<span style="color: #008000">length</span>(bonds.nominal)<span style="color: #666666">-1</span>, NPERS);
+		
+		<span style="color: #408080; font-style: italic">%record keeping </span>
+		interest_paid	   	= <span style="color: #008000">zeros</span>(<span style="color: #008000">length</span>(bonds.nominal), NPERS);
+		principal_paid     	= <span style="color: #008000">zeros</span>(<span style="color: #008000">length</span>(bonds.nominal), NPERS);
+		
+		bond_value = bonds.nominal;
+		cash(<span style="color: #666666">1</span>)    = first_cash;
+		cash_begin_per(s,<span style="color: #666666">1</span>) = cash(<span style="color: #666666">1</span>);
+        
+        unpaid_svc  = <span style="color: #666666">0</span>;
+        in_default  = false;
+        invest_cost = trial_cost_fn(compounds,params);
+        
+		<span style="color: #408080; font-style: italic">% temporary variables to make sure we spend only our target percentage</span>
+	    cash_left_to_spend =  cash(<span style="color: #666666">1</span>) <span style="color: #666666">-</span> bonds.IC_pers<span style="color: #666666">*</span>bonds.nominal(<span style="color: #666666">1</span>)<span style="color: #666666">*</span>bonds.coupon(<span style="color: #666666">1</span>) <span style="color: #666666">-</span>bonds.IC_pers<span style="color: #666666">*</span>bonds.nominal(<span style="color: #666666">2</span>)<span style="color: #666666">*</span>bonds.coupon(<span style="color: #666666">2</span>);
+	    <span style="color: #408080; font-style: italic">% number of compounds we actually buy per phase</span>
+	    num_compounds      =  <span style="color: #008000">zeros</span>(<span style="color: #666666">1</span>,NSTATES);
+
+        money_spent =  <span style="color: #008000">zeros</span>(<span style="color: #666666">1</span>,NCOMPOUNDS);
+		money_saved =  <span style="color: #008000">zeros</span>(<span style="color: #666666">1</span>, NCOMPOUNDS);
+	    psindx      = phase2index_fn(assets.sell_in_phase(<span style="color: #666666">1</span>)); <span style="color: #408080; font-style: italic">%[16,17,18,19,20]</span>
+        cindxs     	=  phase2index_fn(compounds);
+	    price_tmp 	=  invest_cost <span style="color: #666666">+</span> assets.pricing_params(cindxs,assets.pricing_params_col.UpFront)<span style="color: #666666">&#39;</span>;
+        <span style="color: #408080; font-style: italic">% If we have enough cash, buy it and update our initial cash</span>
+        FutureCostEst  = (psindx<span style="color: #666666">&gt;</span>=<span style="color: #666666">1</span>)<span style="color: #666666">.*</span>(assets.pricing_params(cindxs,assets.pricing_params_col.FutureCostEst)<span style="color: #666666">&#39;</span> <span style="color: #666666">-</span> assets.pricing_params(psindx,assets.pricing_params_col.FutureCostEst));
+        
+        <span style="color: #008000; font-weight: bold">for</span> ctr = <span style="color: #666666">1</span>:NCOMPOUNDS
+            <span style="color: #008000; font-weight: bold">if</span> (cash_left_to_spend 	<span style="color: #666666">&gt;</span>= (price_tmp(ctr) <span style="color: #666666">+</span> FutureCostEst(ctr)))
+				money_spent(ctr)     =  price_tmp(ctr);
+				money_saved(ctr)     =  FutureCostEst(ctr);
+                cash_left_to_spend   =  cash_left_to_spend <span style="color: #666666">-</span> price_tmp(ctr) <span style="color: #666666">-</span> FutureCostEst(ctr);
+				cash(<span style="color: #666666">1</span>)              = cash(<span style="color: #666666">1</span>) <span style="color: #666666">-</span> price_tmp(ctr);
+				num_compounds(cindxs(ctr)) =  num_compounds(cindxs(ctr)) <span style="color: #666666">+</span> <span style="color: #666666">1</span>;
+            <span style="color: #008000; font-weight: bold">else</span>
+                <span style="color: #008000; font-weight: bold">if</span> (strcmp(compounds{ctr},<span style="color: #BA2121">&#39;PRE1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P11&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P21&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P31&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;NDA1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;APP1&#39;</span>))
+                    compounds{ctr} = <span style="color: #BA2121">&#39;DSC1&#39;</span>;
+                <span style="color: #008000; font-weight: bold">elseif</span> (strcmp(compounds{ctr},<span style="color: #BA2121">&#39;PRE2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P12&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P22&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P32&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;NDA2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;APP2&#39;</span>))
+                    compounds{ctr} = <span style="color: #BA2121">&#39;DSC2&#39;</span>;
+                <span style="color: #008000; font-weight: bold">elseif</span> (strcmp(compounds{ctr},<span style="color: #BA2121">&#39;PRE3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P13&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P23&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P33&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;NDA3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;APP3&#39;</span>))
+                    compounds{ctr} = <span style="color: #BA2121">&#39;DSC3&#39;</span>;
+                <span style="color: #008000; font-weight: bold">elseif</span> (strcmp(compounds{ctr},<span style="color: #BA2121">&#39;PRE4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P14&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P24&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;P34&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;NDA4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds{ctr},<span style="color: #BA2121">&#39;APP4&#39;</span>))
+                    compounds{ctr} = <span style="color: #BA2121">&#39;DSC4&#39;</span>;    
+                <span style="color: #008000; font-weight: bold">else</span>
+                    compounds{ctr} = <span style="color: #BA2121">&#39;DSC5&#39;</span>;
+                <span style="color: #008000; font-weight: bold">end</span>
+            <span style="color: #008000; font-weight: bold">end</span>
+        <span style="color: #008000; font-weight: bold">end</span>
+    		
+		cash(<span style="color: #666666">2</span>)             = cash(<span style="color: #666666">1</span>) ;
+		cash_begin_per(s,<span style="color: #666666">2</span>) = cash(<span style="color: #666666">1</span>);
+        
+        <span style="color: #408080; font-style: italic">%----- simulate one trajectory ----</span>
+		<span style="color: #408080; font-style: italic">%</span>
+		<span style="color: #408080; font-style: italic">% I) For each time period</span>
+		<span style="color: #408080; font-style: italic">%    1) Check for transitions</span>
+		<span style="color: #408080; font-style: italic">%	 2) Apply waterfall rules</span>
+		<span style="color: #408080; font-style: italic">%		A) if insufficient cash to pay this period&#39;s obligations transaction is in default</span>
+		<span style="color: #408080; font-style: italic">%			i) liquidate portfolio </span>
+		<span style="color: #408080; font-style: italic">%			ii) use proceeds to pay servicing and then all P&amp;I for A1, then P&amp;I for A2, etc.</span>
+		<span style="color: #408080; font-style: italic">%		B) if not in default</span>
+		<span style="color: #408080; font-style: italic">%			i)Pay obligations </span>
+		<span style="color: #408080; font-style: italic">%				a) Pay servicing</span>
+		<span style="color: #408080; font-style: italic">%				b) Pay P&amp;I for A1, then for A2, etc.</span>
+		<span style="color: #408080; font-style: italic">%			ii) check coverage test </span>
+		<span style="color: #408080; font-style: italic">%			iii) If coverage is not OK </span>
+		<span style="color: #408080; font-style: italic">%				a) sell enough assets to bring ratio back in line (coarse approximation)</span>
+		<span style="color: #408080; font-style: italic">%			iv) make investments in compounds as cash permits</span>
+		<span style="color: #408080; font-style: italic">% II) If last time period</span>
+		<span style="color: #408080; font-style: italic">%	1) liquidate portfolio</span>
+		<span style="color: #408080; font-style: italic">%	2) Make final payements to bonds</span>
+		<span style="color: #408080; font-style: italic">%	3) Residual cash goes to equity</span>
+		<span style="color: #408080; font-style: italic">%</span>
+
+		A1_in_default = false;
+		A2_in_default = false;
+        svc_in_default = false;
+        <span style="color: #408080; font-style: italic">%Valuation for average market component.</span>
+		z = <span style="color: #008000">randn</span>(<span style="color: #666666">1</span>);
+		<span style="color: #008000; font-weight: bold">for</span> (<span style="color: #008000">i</span> = <span style="color: #666666">2</span>:NPERS) <span style="color: #408080; font-style: italic">% during life of bonds</span>
+           
+            current_cash  = cash(<span style="color: #008000">i</span>);
+    
+            <span style="color: #408080; font-style: italic">% ----------- first determine current state of portfolio</span>
+            old_phase = compounds;
+                
+            elig_idxs = invested <span style="color: #666666">&amp;</span> <span style="color: #666666">~</span>(strcmp(compounds,<span style="color: #BA2121">&#39;DSC1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC5&#39;</span>) <span style="color: #666666">|</span> 
+                strcmp(compounds,<span style="color: #BA2121">&#39;SLD&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP5&#39;</span>));
+            compounds = check_for_transitions_ffn(compounds, invested, rho, params);
+            sell_idxs = elig_idxs <span style="color: #666666">&amp;</span> (strcmp(assets.sell_in_phase(<span style="color: #666666">1</span>),compounds) <span style="color: #666666">|</span> strcmp(assets.sell_in_phase(<span style="color: #666666">2</span>),compounds) <span style="color: #666666">|</span> strcmp(assets.sell_in_phase(<span style="color: #666666">3</span>),compounds) <span style="color: #666666">|</span> 
+                strcmp(assets.sell_in_phase(<span style="color: #666666">4</span>),compounds) <span style="color: #666666">|</span> strcmp(assets.sell_in_phase(<span style="color: #666666">5</span>),compounds));
+            pr = sell_compound_ffn(sell_idxs,<span style="color: #008000">i</span>);
+           
+    	    dsc_idxs = elig_idxs <span style="color: #666666">&amp;</span> (strcmp(compounds,<span style="color: #BA2121">&#39;DSC1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC5&#39;</span>));
+            withdraw_compound_ffn(old_phase(dsc_idxs),<span style="color: #008000">i</span>);
+            time_in_phase(dsc_idxs) = <span style="color: #666666">0</span>;
+            trans_idxs = elig_idxs <span style="color: #666666">&amp;</span> (<span style="color: #666666">~</span>sell_idxs) <span style="color: #666666">&amp;</span> (<span style="color: #666666">~</span>dsc_idxs) <span style="color: #666666">&amp;</span> (<span style="color: #666666">~</span>strcmp(old_phase,compounds)); <span style="color: #408080; font-style: italic">%transiton occured</span>
+           
+            transition_compound_ffn(trans_idxs);
+            stat_idxs = elig_idxs <span style="color: #666666">&amp;</span> <span style="color: #666666">~</span>sell_idxs <span style="color: #666666">&amp;</span> <span style="color: #666666">~</span>dsc_idxs <span style="color: #666666">&amp;</span> <span style="color: #666666">~</span>trans_idxs;
+            time_in_phase(stat_idxs) = time_in_phase(stat_idxs)<span style="color: #666666">+1</span>;
+			
+			<span style="color: #408080; font-style: italic">% ----------- accounting balance</span>
+			A1_realized_vals(s,<span style="color: #008000">i</span>) = bond_value(<span style="color: #666666">1</span>);
+			A2_realized_vals(s,<span style="color: #008000">i</span>) = bond_value(<span style="color: #666666">2</span>);
+			
+			<span style="color: #408080; font-style: italic">%------------ next if not yet in default, check for default</span>
+			<span style="color: #008000; font-weight: bold">if</span>(<span style="color: #666666">~</span>in_default) 
+              in_default = check_for_default_ffn(<span style="color: #008000">i</span>,current_cash);
+			<span style="color: #008000; font-weight: bold">end</span> <span style="color: #408080; font-style: italic">%if ~in_default</span>
+			
+			<span style="color: #408080; font-style: italic">%------------ next if not in default pay P&amp;I; if in default liquidate portfolio</span>
+			<span style="color: #008000; font-weight: bold">if</span> (<span style="color: #666666">~</span>in_default)
+                <span style="color: #408080; font-style: italic">%Pay service fees</span>
+                [current_cash] = pay_servicing_ffn(<span style="color: #008000">i</span>,current_cash);
+				<span style="color: #408080; font-style: italic">%Pay P&amp;I</span>
+                [current_cash] = pay_interest_ffn(<span style="color: #008000">i</span>,current_cash);
+                [current_cash] = pay_principal_ffn(<span style="color: #008000">i</span>,current_cash);
+				
+				<span style="color: #408080; font-style: italic">%------------ next check coverage</span>
+				<span style="color: #008000; font-weight: bold">for</span>(b = <span style="color: #666666">1</span>:NBONDS) <span style="color: #408080; font-style: italic">%calc IC coverage</span>
+					<span style="color: #008000; font-weight: bold">if</span>(bond_value(b)<span style="color: #666666">&gt;0</span>)		
+						cash_for_coverage=current_cash<span style="color: #666666">+</span>sum(cash(<span style="color: #008000">i</span><span style="color: #666666">+</span>(<span style="color: #666666">1</span>:params.bonds.IC_pers)));
+                        [IC_ratio(b,<span style="color: #008000">i</span>) cost_due K] = ic_test_result_ffn(b,<span style="color: #008000">i</span>,cash_for_coverage);  
+						
+						IC_shortfall(b,<span style="color: #008000">i</span>) = (bonds.interest_coverage(b)<span style="color: #666666">*</span>cost_due) <span style="color: #666666">-</span> K;                     					
+					<span style="color: #008000; font-weight: bold">else</span> 
+                        IC_shortfall(b) = <span style="color: #666666">0</span>;
+                    <span style="color: #008000; font-weight: bold">end</span> <span style="color: #408080; font-style: italic">%if bond_value(b)&gt;0</span>
+				<span style="color: #008000; font-weight: bold">end</span> <span style="color: #408080; font-style: italic">%for b = 1: NBONDS</span>
+
+                
+				<span style="color: #408080; font-style: italic">%------------ check equity svc coverage</span>
+				eq_svc_due = unpaid_svc;
+				<span style="color: #008000; font-weight: bold">for</span> (k = <span style="color: #666666">1</span>:<span style="color: #008000">ceil</span>(max(assets.sale_time)))
+					eq_svc_due = eq_svc_due <span style="color: #666666">+</span> bond_value(<span style="color: #008000">length</span>(bond_value))<span style="color: #666666">*</span>bonds.servicing_rate;
+				<span style="color: #008000; font-weight: bold">end</span>
+				eq_shortfall =  eq_svc_due <span style="color: #666666">-</span> current_cash;
+				
+				<span style="color: #408080; font-style: italic">%------------ next if IC too low, sell compounds to cover</span>
+				max_shortfall = max([IC_shortfall(:,<span style="color: #008000">i</span>);eq_shortfall]); 
+				
+				<span style="color: #008000; font-weight: bold">if</span>(max_shortfall <span style="color: #666666">&gt;</span> <span style="color: #666666">0</span>) 
+					<span style="color: #408080; font-style: italic">%Mutates cash,compounds.</span>
+					sell_compounds_to_cover_shortfall_ffn(max_shortfall,<span style="color: #008000">i</span>);
+					OK_to_fund = false;
+				<span style="color: #008000; font-weight: bold">else</span> 
+					OK_to_fund = true;
+				<span style="color: #008000; font-weight: bold">end</span>
+				
+				<span style="color: #408080; font-style: italic">%------------ next if IC is OK fund next phases of research for compounds </span>
+				compounds_to_fund(s,<span style="color: #008000">i</span>) = sum( <span style="color: #666666">~</span>(strcmp(compounds,<span style="color: #BA2121">&#39;DSC1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC5&#39;</span>)) <span style="color: #666666">&amp;</span> 
+                    <span style="color: #666666">~</span>(strcmp(compounds,<span style="color: #BA2121">&#39;APP1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP5&#39;</span>)) <span style="color: #666666">&amp;</span> 
+                    <span style="color: #666666">~</span>strcmp(compounds,<span style="color: #BA2121">&#39;SLD&#39;</span>) <span style="color: #666666">&amp;</span> <span style="color: #666666">~</span>invested);
+
+				<span style="color: #008000; font-weight: bold">if</span>(OK_to_fund)
+					<span style="color: #008000; font-weight: bold">if</span>(<span style="color: #008000">i</span><span style="color: #666666">&lt;</span>NPERS)
+						<span style="color: #008000; font-weight: bold">if</span>(<span style="color: #008000">i</span><span style="color: #666666">&lt;</span>NPERS<span style="color: #666666">-</span>bonds.IC_pers) 
+                            next_pers = (<span style="color: #008000">i</span><span style="color: #666666">+1</span>):(<span style="color: #008000">i</span><span style="color: #666666">+</span>bonds.IC_pers); 
+							num       = bonds.IC_pers;
+						<span style="color: #008000; font-weight: bold">elseif</span> (<span style="color: #008000">i</span><span style="color: #666666">&lt;</span>(NPERS<span style="color: #666666">-</span>bonds.IC_pers<span style="color: #666666">-1</span>))
+							next_pers = (<span style="color: #008000">i</span><span style="color: #666666">+1</span>):(<span style="color: #008000">i</span><span style="color: #666666">+</span>bonds.IC_pers<span style="color: #666666">-1</span>);
+							num       = bonds.IC_pers<span style="color: #666666">-1</span>;
+						<span style="color: #008000; font-weight: bold">else</span>
+							next_pers = <span style="color: #008000">i</span><span style="color: #666666">+1</span>;
+							num       = <span style="color: #666666">1</span>;
+                        <span style="color: #008000; font-weight: bold">end</span>
+							
+						cash_required_for_future = sum(sum(AMORT_SCHED(:,next_pers))) <span style="color: #666666">+</span> num<span style="color: #666666">*</span>( sum(bonds.coupon(<span style="color: #666666">1</span>:NBONDS)<span style="color: #666666">.*</span>bond_value(<span style="color: #666666">1</span>:NBONDS))<span style="color: #666666">+</span>(bonds.servicing_rate<span style="color: #666666">*</span>sum(bond_value))); 
+						cash_to_invest           = max(current_cash<span style="color: #666666">-</span>cash_required_for_future,<span style="color: #666666">0</span>);
+                        
+						<span style="color: #008000; font-weight: bold">if</span>(cash_to_invest<span style="color: #666666">&gt;0</span>)
+                            compound_nos           = <span style="color: #666666">1</span>:NCOMPOUNDS;
+							compounds_to_fund_idx  = compound_nos(<span style="color: #666666">~</span>(strcmp(compounds,<span style="color: #BA2121">&#39;DSC1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC5&#39;</span>)) <span style="color: #666666">&amp;</span> 
+                            <span style="color: #666666">~</span>(strcmp(compounds,<span style="color: #BA2121">&#39;APP1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP5&#39;</span>)) <span style="color: #666666">&amp;</span> 
+                            <span style="color: #666666">~</span>strcmp(compounds,<span style="color: #BA2121">&#39;SLD&#39;</span>) <span style="color: #666666">&amp;</span> <span style="color: #666666">~</span>invested); <span style="color: #408080; font-style: italic">%index of compounds that need funding</span>
+							cash_spent             = <span style="color: #666666">0</span>;
+							<span style="color: #008000; font-weight: bold">for</span>(k = compounds_to_fund_idx)
+								<span style="color: #008000; font-weight: bold">if</span>(invest_cost(k) <span style="color: #666666">&lt;</span>= cash_to_invest) 
+									invested(k)    = true;
+									cash_to_invest = cash_to_invest<span style="color: #666666">-</span>invest_cost(k);
+									cash_spent     = cash_spent<span style="color: #666666">+</span>invest_cost(k);
+									compounds_funded(s,<span style="color: #008000">i</span>) = compounds_funded(s,<span style="color: #008000">i</span>)<span style="color: #666666">+1</span>;
+								<span style="color: #008000; font-weight: bold">end</span>
+							<span style="color: #008000; font-weight: bold">end</span>
+							current_cash = current_cash<span style="color: #666666">-</span>cash_spent ;
+							cash_for_investment(s,<span style="color: #008000">i</span>) = cash_for_investment(s,<span style="color: #008000">i</span>) <span style="color: #666666">+</span> cash_spent;
+						<span style="color: #008000; font-weight: bold">end</span>
+                    <span style="color: #008000; font-weight: bold">end</span> <span style="color: #408080; font-style: italic">%if(i&lt;NPERS)</span>
+                <span style="color: #008000; font-weight: bold">end</span> <span style="color: #408080; font-style: italic">%if(OK_to_fund)</span>
+			<span style="color: #008000; font-weight: bold">else</span> <span style="color: #408080; font-style: italic">% already in default</span>
+
+				liquidate_portfolio_ffn(<span style="color: #008000">i</span>);
+				[current_cash] = pay_servicing_ffn(<span style="color: #008000">i</span>,current_cash) ; <span style="color: #408080; font-style: italic">% need to check to make sure missed payements are tracked</span>
+
+				<span style="color: #408080; font-style: italic">%PAY P&amp;I</span>
+				<span style="color: #008000; font-weight: bold">for</span>(b = <span style="color: #666666">1</span>:NBONDS) <span style="color: #408080; font-style: italic">% pay down bonds sequentially</span>
+                    
+                    <span style="color: #008000; font-weight: bold">if</span>(current_cash<span style="color: #666666">&gt;0</span>)
+                        I  = min(current_cash,bonds.coupon(b)<span style="color: #666666">*</span>bond_value(b)); 
+                        interest_paid(b,<span style="color: #008000">i</span>)  = I;
+                        current_cash        = current_cash<span style="color: #666666">-</span>I;
+                        
+                        P                   = min(current_cash,bond_value(b));
+                        principal_paid(b,<span style="color: #008000">i</span>) = P;
+                        bond_value(b)       = bond_value(b)<span style="color: #666666">-</span>P;
+                        <span style="color: #008000; font-weight: bold">if</span>(bond_value(b)<span style="color: #666666">&lt;0.0001</span>) 
+                            bond_value(b) = <span style="color: #666666">0</span>;
+                        <span style="color: #008000; font-weight: bold">end</span>
+                        current_cash = current_cash<span style="color: #666666">-</span>P;
+                    <span style="color: #008000; font-weight: bold">end</span>
+                <span style="color: #008000; font-weight: bold">end</span>
+				<span style="color: #408080; font-style: italic">% Check to see if A1 defaults	</span>
+				<span style="color: #008000; font-weight: bold">if</span> (<span style="color: #666666">~</span>A1_in_default <span style="color: #666666">&amp;&amp;</span> A2_in_default)
+					<span style="color: #008000; font-weight: bold">if</span> (bond_value(<span style="color: #666666">1</span>) <span style="color: #666666">&gt;</span> <span style="color: #666666">0</span>) 
+						A1_in_default = true;
+					<span style="color: #008000; font-weight: bold">end</span>
+				<span style="color: #008000; font-weight: bold">end</span>
+            <span style="color: #008000; font-weight: bold">end</span> <span style="color: #408080; font-style: italic">%else ~in_default</span>
+
+			cash(<span style="color: #008000">i</span>) = current_cash;
+            
+			<span style="color: #008000; font-weight: bold">if</span>(<span style="color: #008000">i</span><span style="color: #666666">~=</span>NPERS) 
+				<span style="color: #408080; font-style: italic">%cash left over at end of period acquires interest</span>
+				cash(<span style="color: #008000">i</span><span style="color: #666666">+1</span>)             = cash(<span style="color: #008000">i</span><span style="color: #666666">+1</span>)<span style="color: #666666">+</span>(current_cash<span style="color: #666666">*</span>(<span style="color: #666666">1+</span>bonds.cash_accrual_int_rate));
+				cash_begin_per(s,<span style="color: #008000">i</span><span style="color: #666666">+1</span>) = cash(<span style="color: #008000">i</span><span style="color: #666666">+1</span>);
+                
+			<span style="color: #008000; font-weight: bold">end</span>
+		
+				
+		<span style="color: #008000; font-weight: bold">end</span> <span style="color: #408080; font-style: italic">%for i = 2 : NPERS	%%END TIMESTEP ITERATION%%%%%</span>
+
+		final_compounds = final_compounds <span style="color: #666666">+</span> [ sum(strcmp(compounds,<span style="color: #BA2121">&#39;DSC1&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;DSC2&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;DSC3&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;DSC4&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;DSC5&#39;</span>)) 
+        sum(strcmp(compounds,<span style="color: #BA2121">&#39;PRE1&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;PRE2&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;PRE3&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;PRE4&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;PRE5&#39;</span>)) 
+        sum(strcmp(compounds,<span style="color: #BA2121">&#39;P11&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P12&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P13&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P14&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P15&#39;</span>)) 
+        sum(strcmp(compounds,<span style="color: #BA2121">&#39;P21&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P22&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P23&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P24&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P25&#39;</span>)) 
+        sum(strcmp(compounds,<span style="color: #BA2121">&#39;P31&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P32&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P33&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P34&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;P35&#39;</span>)) 
+        sum(strcmp(compounds,<span style="color: #BA2121">&#39;NDA1&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;NDA2&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;NDA3&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;NDA4&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;NDA5&#39;</span>)) 
+        sum(strcmp(compounds,<span style="color: #BA2121">&#39;APP1&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;APP2&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;APP3&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;APP4&#39;</span>)) sum(strcmp(compounds,<span style="color: #BA2121">&#39;APP5&#39;</span>))]<span style="color: #666666">./</span>NSIMUS;
+
+		liquidate_portfolio_ffn(NPERS);
+        <span style="color: #008000; font-weight: bold">for</span>(<span style="color: #008000">i</span> = NPERS:(HORIZON<span style="color: #666666">-1</span>)) 
+			current_cash = cash(<span style="color: #008000">i</span>);
+			[current_cash] = pay_servicing_ffn(<span style="color: #008000">i</span>,current_cash);
+            cash(<span style="color: #008000">i</span>)=current_cash;
+			cash(<span style="color: #008000">i</span><span style="color: #666666">+1</span>)    = cash(<span style="color: #008000">i</span>)<span style="color: #666666">+</span>cash(<span style="color: #008000">i</span><span style="color: #666666">+1</span>); <span style="color: #408080; font-style: italic">% last sales; need to add check for NPERS&gt;=HORIZON</span>
+            
+			cash_begin_per(s,<span style="color: #008000">i</span><span style="color: #666666">+1</span>) = cash(<span style="color: #008000">i</span><span style="color: #666666">+1</span>);
+        <span style="color: #008000; font-weight: bold">end</span>
+		cash_realized(s,:)    = cash;
+		compounds_bought(s,:) = num_compounds;
+
+		A1_paid(s,:)   = principal_paid(<span style="color: #666666">1</span>,:)<span style="color: #666666">+</span>interest_paid(<span style="color: #666666">1</span>,:);
+		A2_paid(s,:)   = principal_paid(<span style="color: #666666">2</span>,:)<span style="color: #666666">+</span>interest_paid(<span style="color: #666666">2</span>,:);
+		A1_defaults(s) = A1_in_default;
+		A2_defaults(s) = A2_in_default;
+        svc_defaults(s)= svc_in_default;
+		return_on_equity(s) = max((cash(<span style="color: #008000; font-weight: bold">end</span>) <span style="color: #666666">-</span> bonds.nominal(bonds.nominal_col.EQ))<span style="color: #666666">/</span>(bonds.nominal(bonds.nominal_col.EQ)),<span style="color: #666666">-1</span>);
+ 
+    <span style="color: #008000; font-weight: bold">end</span> <span style="color: #408080; font-style: italic">%for s = 1:NSIMUS 	###END SIM COUNT LOOP#####</span>
+    
+
+    results = struct;
+    
+    results.runtime = toc(tStart);
+    results.cash_begin_per      = cash_begin_per;
+    results.cash                = cash_realized;
+    results.cash_for_investment = cash_for_investment;
+    results.A1_bals           = A1_realized_vals;
+    results.A2_bals           = A2_realized_vals;
+    results.amort_sched       = AMORT_SCHED;
+    results.A1_payment        = A1_paid;
+    results.A2_payment        = A2_paid;
+    results.IC_ratio          = IC_ratio;
+    results.ROE               = return_on_equity;
+    results.sale_phases           = sales;
+    results.sale_phases_row       = sales_row;
+    results.sale_phases_col       = sales_col;
+    results.withdrawal_phases     = withdrawals;
+    results.withdrawal_phases_row = withdrawals_row;
+    results.withdrawal_phases_col = withdrawals_col;
+    results.sale_times            = sale_times;
+    results.sale_times_row        = sale_times_row;
+    results.sale_times_col        = sale_times_col;
+    results.withdrawal_times      = withdrawal_times;
+    results.withdrawal_times_row  = withdrawal_times_row;
+    results.withdrawal_times_col  = withdrawal_times_col;
+    results.extra_cash_for_coverage    = extra_cash_from_coverage;
+    results.servicing                  = history_service;
+    results.compounds_to_fund              = compounds_to_fund;
+    results.compounds_to_fund_row          = compounds_to_fund_row;
+    results.compounds_to_fund_col          = compounds_to_fund_col;
+    results.compounds_funded               = compounds_funded;
+    results.compounds_funded_row           = compounds_funded_row;
+    results.compounds_funded_col           = compounds_funded_col;
+    results.compounds_initially_bought     = compounds_bought;
+    results.compounds_initially_bought_row = compounds_bought_row;
+    results.compounds_initially_bought_col = compounds_bought_col;
+    results.params            = params;
+    results.final_sale_values = sell_value;
+    results.compounds_left    = final_compounds;
+    results.A1_defaults       = A1_defaults;
+    results.A2_defaults       = A2_defaults;
+    results.svc_defaults      = svc_defaults;
+
+<span style="color: #008000; font-weight: bold">end</span>
+
+<span style="color: #408080; font-style: italic">%Usage</span>
+<span style="color: #008000; font-weight: bold">function</span><span style="color: #bbbbbb"> </span>next_phase =<span style="color: #bbbbbb"> </span><span style="color: #0000FF">check_for_transitions_ffn</span>(compounds, invested, rho, params)<span style="color: #bbbbbb"></span>
+<span style="color: #bbbbbb">    </span>next_phase = compounds;
+    phase_idxs  = phase2index_fn(compounds);
+    eligible_idx = <span style="color: #666666">~</span>(strcmp(compounds,<span style="color: #BA2121">&#39;DSC1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;DSC5&#39;</span>)) <span style="color: #666666">&amp;</span> 
+        <span style="color: #666666">~</span>(strcmp(compounds,<span style="color: #BA2121">&#39;APP1&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP2&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP3&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP4&#39;</span>) <span style="color: #666666">|</span> strcmp(compounds,<span style="color: #BA2121">&#39;APP5&#39;</span>)) <span style="color: #666666">&amp;</span> 
+        <span style="color: #666666">~</span>strcmp(compounds,<span style="color: #BA2121">&#39;SLD&#39;</span>) <span style="color: #666666">&amp;</span> invested;
+    
+    <span style="color: #408080; font-style: italic">% Add time-variability for the transition matrix</span>
+    paramsT = init_params_fn_ryan_v2();
+    
+    p = <span style="color: #008000">rand</span>(<span style="color: #008000">size</span>(<span style="color: #008000">find</span>(eligible_idx)));
+    elig_phase = determine_current_state_fn(p, paramsT.assets.trans_prob(phase_idxs(eligible_idx),:), paramsT.assets.trans_prob_col);
+    next_phase(eligible_idx)=elig_phase; 
+<span style="color: #008000; font-weight: bold">end</span>
+
+
+<span style="color: #408080; font-style: italic">%COPYRIGHT 2012,2013</span>
+<span style="color: #408080; font-style: italic">% This program is free software: you can redistribute it and/or modify</span>
+<span style="color: #408080; font-style: italic">%    it under the terms of the GNU General Public License as published by</span>
+<span style="color: #408080; font-style: italic">%    the Free Software Foundation, either version 3 of the License, or</span>
+<span style="color: #408080; font-style: italic">%    (at your option) any later version.</span>
+<span style="color: #408080; font-style: italic">%</span>
+<span style="color: #408080; font-style: italic">%    This program is distributed in the hope that it will be useful,</span>
+<span style="color: #408080; font-style: italic">%    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span style="color: #408080; font-style: italic">%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span style="color: #408080; font-style: italic">%    GNU General Public License for more details.</span>
+<span style="color: #408080; font-style: italic">%</span>
+<span style="color: #408080; font-style: italic">%    You should have received a copy of the GNU General Public License</span>
+<span style="color: #408080; font-style: italic">%    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span style="color: #408080; font-style: italic">%</span>
+<span style="color: #408080; font-style: italic">%</span>
+</pre></div>
+</body>
+</html>
